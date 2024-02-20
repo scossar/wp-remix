@@ -9,9 +9,9 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Hello World!</h1>
-      <p>
+    <div className="max-w-md mx-auto my-2">
+      <h1 className="text-3xl">Hello World!</h1>
+      <p className="my-1">
         This is a test, this is only a test.... Please do not adjust your set.
         Normal programming will resume shortly...
       </p>
