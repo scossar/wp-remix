@@ -13,8 +13,9 @@ export default function Index() {
       <h1>Hello World!</h1>
       <p>
         This is a test, this is only a test.... Please do not adjust your set.
-        Normal programming will resume shortly.
+        Normal programming will resume shortly...
       </p>
+      <p>Soon I promise...</p>
     </div>
   );
 }
