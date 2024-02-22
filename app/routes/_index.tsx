@@ -10,12 +10,8 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className="max-w-md mx-auto my-2">
-      <h1 className="text-3xl">Hello World!</h1>
-      <p className="my-1">
-        This is a test, this is only a test.... Please do not adjust your set.
-        Normal programming will resume shortly...
-      </p>
-      <p>Soon I promise...</p>
+      <h2 className="text-3xl my-1">Hello Zalgorithm!</h2>
+      <p className="my-1">Zalgorithm: a zigzag algorithm.</p>
     </div>
   );
 }
