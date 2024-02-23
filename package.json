@@ -8,19 +8,25 @@
     "dev": "remix dev --manual",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "generate": "graphql-codegen"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.5",
     "@prisma/client": "^5.10.2",
     "@remix-run/css-bundle": "^2.6.0",
     "@remix-run/node": "^2.6.0",
     "@remix-run/react": "^2.6.0",
     "@remix-run/serve": "^2.6.0",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.8.1",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.2.4",
     "@remix-run/dev": "^2.6.0",
     "@types/node": "^20.11.19",
     "@types/react": "^18.2.20",
