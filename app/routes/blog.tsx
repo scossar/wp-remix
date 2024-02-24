@@ -19,9 +19,11 @@ export default function Blog() {
             {section}
           </h2>
           <hr className="my-3 border-solid border-slate-900" />
-          {iterations.map((_, index) => (
-            <PostExcerptCard key={index} />
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {iterations.map((_, index) => (
+              <PostExcerptCard key={index} />
+            ))}
+          </div>
         </div>
       ))}
     </div>
