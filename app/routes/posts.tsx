@@ -31,7 +31,7 @@ export default function Posts() {
   return (
     <main className="max-w-prose mx-auto">
       <header>
-        <h2 className="text-3xl font-serif py-1">Posts</h2>
+        <h2 className="text-3xl py-1">WordPress Posts</h2>
       </header>
       <ul>
         {posts.map((post: Post) => (
