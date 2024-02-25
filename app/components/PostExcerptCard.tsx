@@ -1,40 +1,41 @@
-import type { PostConnectionEdge } from "~/graphql/__generated__/graphql";
+import { Maybe } from "graphql/jsutils/Maybe";
 
 interface PostExcerptCardProps {
-  postConnectionEdge: PostConnectionEdge;
+  date: Maybe<string | null>;
+  featuredImage: Maybe<string | null>;
+  title: Maybe<string | null>;
+  excerpt: Maybe<string | null>;
+  authorName: Maybe<string | null>;
 }
 
 export default function PostExcerptCard({
-  postConnectionEdge,
+  date,
+  featuredImage,
+  title,
+  excerpt,
+  authorName,
 }: PostExcerptCardProps) {
-  const post = postConnectionEdge.node;
-  const date = post?.date ? new Date(post.date) : null;
   const formattedDate = date
-    ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
-        2,
-        "0"
-      )}-${String(date.getDate()).padStart(2, "0")}`
+    ? `${new Date(date).getFullYear()}-${String(
+        new Date(date).getMonth() + 1
+      ).padStart(2, "0")}-${String(new Date(date).getDate()).padStart(2, "0")}`
     : null;
 
   return (
     <article>
-      {post?.featuredImage && post.featuredImage.node?.sourceUrl ? (
-        <img src={post.featuredImage.node.sourceUrl} />
-      ) : (
-        ""
-      )}
-      <h3 className="text-xl font-serif font-bold mt-3">{post.title}</h3>
-      {post?.excerpt ? (
+      {featuredImage ? <img src={featuredImage} /> : ""}
+      <h3 className="text-xl font-serif font-bold mt-3">{title}</h3>
+      {excerpt ? (
         <div
           className="italic text-slate-800 text-base"
-          dangerouslySetInnerHTML={{ __html: post.excerpt }}
+          dangerouslySetInnerHTML={{ __html: excerpt }}
         />
       ) : (
         ""
       )}
-      {post?.author?.node?.name && formattedDate ? (
+      {authorName && formattedDate ? (
         <div className="text-slate-800 text-base mt-1">
-          {post.author.node.name} <br />
+          {authorName} <br />
           {formattedDate}
         </div>
       ) : (
