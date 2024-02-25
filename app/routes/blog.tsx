@@ -36,7 +36,7 @@ export async function loader() {
 export default function Blog() {
   const { latestPostsEdges, categoryEdges } = useLoaderData<typeof loader>();
   return (
-    <div className="px-6 mx-auto">
+    <div className="px-6 mx-auto max-w-screen-lg">
       <h2 className="text-2xl text-slate-900 mt-3 font-serif font-bold">
         Latest Posts
       </h2>
