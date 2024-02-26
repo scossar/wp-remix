@@ -33,14 +33,14 @@ export async function loader() {
   });
 }
 
-export default function Blog() {
+export default function BlogIndex() {
   const { latestPostsEdges, categoryEdges } = useLoaderData<typeof loader>();
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
-      <h2 className="text-2xl text-slate-900 mt-3 font-serif font-bold">
+      <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold">
         Latest Posts
       </h2>
-      <hr className="my-3 border-solid border-slate-900" />
+      <hr className="mt-2 mb-3 border-solid border-slate-900" />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {latestPostsEdges.map((edge: PostConnectionEdge) => (
           <PostExcerptCard
@@ -49,16 +49,17 @@ export default function Blog() {
             featuredImage={edge.node?.featuredImage?.node?.sourceUrl}
             excerpt={edge.node?.excerpt}
             authorName={edge.node?.author?.node?.name}
+            slug={edge.node?.slug}
             key={edge.node.id}
           />
         ))}
       </div>
       {categoryEdges.map((categoryEdge: RootQueryToCategoryConnectionEdge) => (
         <div key={categoryEdge.node.name}>
-          <h2 className="text-2xl text-slate-900 mt-3 font-serif font-bold">
+          <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold">
             {categoryEdge.node.name}
           </h2>
-          <hr className="my-3 border-solid border-slate-900" />
+          <hr className="mt-2 mb-3 border-solid border-slate-900" />
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {categoryEdge.node?.posts?.edges.map(
               (postEdge: PostConnectionEdge) => (
@@ -68,6 +69,7 @@ export default function Blog() {
                   featuredImage={postEdge.node?.featuredImage?.node?.sourceUrl}
                   excerpt={postEdge.node?.excerpt}
                   authorName={postEdge.node.author?.node?.name}
+                  slug={postEdge.node?.slug}
                   key={postEdge.node.id}
                 />
               )

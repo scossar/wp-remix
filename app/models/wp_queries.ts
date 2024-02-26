@@ -28,6 +28,31 @@ query GetPosts {
 }
 `);
 
+export const POST_BY_SLUG_QUERY = gql(`
+query GetPostBySlug ($id: ID!) {
+  post(id: $id, idType: SLUG) {
+    id
+    title
+    content
+    date
+    author {
+      node {
+        name
+      }
+    }
+    featuredImage {
+      node {
+        altText
+        description
+        caption
+        id
+        sourceUrl
+      }
+    }
+  }
+}
+`);
+
 export const INDEX_PAGE_POSTS_QUERY = gql(`
 query getSitePosts {
     posts(first: 5, where: {orderby: {field: DATE, order: DESC}}) {
@@ -35,6 +60,7 @@ query getSitePosts {
         node {
           id
           title
+          slug
           excerpt
           date
           author {
@@ -62,6 +88,7 @@ query getSitePosts {
               node {
                 id
                 title
+                slug
                 excerpt
                 date
                 author {

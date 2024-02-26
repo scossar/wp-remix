@@ -10,4 +10,7 @@
   .wp-excerpt .more-link {
     @apply hidden;
   }
+  .wp-post p {
+    @apply my-2;
+  }
 }

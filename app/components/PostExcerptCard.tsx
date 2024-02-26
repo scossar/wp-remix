@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { Maybe } from "graphql/jsutils/Maybe";
 
 interface PostExcerptCardProps {
@@ -6,6 +7,7 @@ interface PostExcerptCardProps {
   title: Maybe<string | null>;
   excerpt: Maybe<string | null>;
   authorName: Maybe<string | null>;
+  slug: Maybe<string | null>;
 }
 
 export default function PostExcerptCard({
@@ -14,6 +16,7 @@ export default function PostExcerptCard({
   title,
   excerpt,
   authorName,
+  slug,
 }: PostExcerptCardProps) {
   const formattedDate = date
     ? `${new Date(date).getFullYear()}-${String(
@@ -23,8 +26,10 @@ export default function PostExcerptCard({
 
   return (
     <article>
-      {featuredImage ? <img src={featuredImage} /> : ""}
-      <h3 className="text-xl font-serif font-bold mt-3">{title}</h3>
+      {featuredImage ? <img className="rounded-md" src={featuredImage} /> : ""}
+      <Link prefetch="intent" to={`/blog/${slug}`}>
+        <h3 className="text-xl font-serif font-bold mt-3">{title}</h3>
+      </Link>
       {excerpt ? (
         <div
           className="italic text-slate-800 text-base wp-excerpt"
