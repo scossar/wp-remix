@@ -17,4 +17,7 @@
   .wp-post pre {
     @apply overflow-scroll bg-slate-100 text-slate-950;
   }
+  .wp-post iframe {
+    @apply max-w-full;
+  }
 }
