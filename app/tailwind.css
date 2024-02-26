@@ -13,4 +13,8 @@
   .wp-post p {
     @apply my-2;
   }
+  .wp-post code,
+  .wp-post pre {
+    @apply overflow-scroll bg-cyan-900 text-slate-50;
+  }
 }
