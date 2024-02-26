@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .wp-excerpt p {
+    @apply break-words;
+  }
+  /* temp fix */
+  .wp-excerpt .more-link {
+    @apply hidden;
+  }
+}

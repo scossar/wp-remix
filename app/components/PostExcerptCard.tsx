@@ -27,7 +27,7 @@ export default function PostExcerptCard({
       <h3 className="text-xl font-serif font-bold mt-3">{title}</h3>
       {excerpt ? (
         <div
-          className="italic text-slate-800 text-base"
+          className="italic text-slate-800 text-base wp-excerpt"
           dangerouslySetInnerHTML={{ __html: excerpt }}
         />
       ) : (
