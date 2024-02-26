@@ -15,6 +15,6 @@
   }
   .wp-post code,
   .wp-post pre {
-    @apply overflow-scroll bg-cyan-900 text-slate-50;
+    @apply overflow-scroll bg-slate-100 text-slate-950;
   }
 }
