@@ -41,4 +41,7 @@
   .wp-post h3 {
     @apply text-slate-900 text-2xl font-serif;
   }
+  .wp-post img {
+    @apply rounded-md shadow-xl;
+  }
 }
