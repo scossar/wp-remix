@@ -12,9 +12,18 @@ export const meta: MetaFunction = ({ data }) => {
   const title = post?.title ? post.title : "Simon's blog";
   let description = post?.excerpt
     ? stripHtml(post.excerpt)
-    : `Read more about ${post.title} on Simon's Blog`;
+    : `Read more about ${post.title}`;
   description = truncateText(description, 160);
-  return [{ title: title }, { description: description }];
+  const imageUrl = post?.featuredImage?.node?.sourceUrl
+    ? post.featuredImage.node.sourceUrl
+    : "";
+  return [
+    { title: title },
+    { description: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:image", content: imageUrl },
+  ];
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
