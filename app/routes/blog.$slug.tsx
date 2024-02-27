@@ -26,7 +26,7 @@ export const meta: MetaFunction = ({ data }) => {
     { description: description },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    { property: "og:url", url },
+    { property: "og:url", content: url },
     { property: "og:image", content: imageUrl },
     { property: "og:type", content: "website" },
   ];
