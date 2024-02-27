@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node";
+import { json, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
 import { createApolloClient } from "lib/createApolloClient";
@@ -8,6 +8,13 @@ import type {
 } from "~/graphql/__generated__/graphql";
 import { INDEX_PAGE_POSTS_QUERY } from "~/models/wp_queries";
 import PostExcerptCard from "~/components/PostExcerptCard";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Simon's Blog" },
+    { name: "description", content: "Simon Cossar's blog" },
+  ];
+};
 
 export async function loader() {
   const client = createApolloClient();
