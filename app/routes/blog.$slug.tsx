@@ -5,17 +5,7 @@ import invariant from "tiny-invariant";
 import { createApolloClient } from "lib/createApolloClient";
 import { POST_BY_SLUG_QUERY } from "~/models/wp_queries";
 import type { Post } from "~/graphql/__generated__/graphql";
-
-// todo: move the next two functions to a utility file
-function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength - 1) + "…"; // Using an ellipsis character
-}
-
-function stripHtml(html: string): string {
-  // do not parse HTML with regular expressions :)
-  return html.replace(/<[^>]*>/g, "");
-}
+import { stripHtml, truncateText } from "~/utils/utilities";
 
 export const meta: MetaFunction = ({ data }) => {
   const post = data as Post;
