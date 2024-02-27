@@ -35,4 +35,10 @@
   .wp-post ol {
     @apply list-decimal;
   }
+  .wp-post h2 {
+    @apply text-slate-900 text-3xl font-serif;
+  }
+  .wp-post h3 {
+    @apply text-slate-900 text-2xl font-serif;
+  }
 }

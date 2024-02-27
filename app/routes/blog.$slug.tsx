@@ -86,7 +86,7 @@ export default function BlogPost() {
       ) : (
         ""
       )}
-      <h2 className="text-2xl text-slate-900 font-serif">{post.title}</h2>
+      <h2 className="text-3xl text-slate-900 font-serif">{post.title}</h2>
       {author && date ? (
         <span>
           <span>{author}</span>
