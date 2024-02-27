@@ -28,7 +28,9 @@ export default function PostExcerptCard({
     <article>
       {featuredImage ? <img className="rounded-md" src={featuredImage} /> : ""}
       <Link prefetch="intent" to={`/blog/${slug}`}>
-        <h3 className="text-xl font-serif font-bold mt-3">{title}</h3>
+        <h3 className="text-xl font-serif font-bold mt-3 text-sky-700 hover:underline">
+          {title}
+        </h3>
       </Link>
       {excerpt ? (
         <div

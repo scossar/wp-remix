@@ -15,7 +15,7 @@
   }
   .wp-excerpt a,
   .wp-post a {
-    @apply font-medium text-blue-600 hover:underline break-words;
+    @apply font-medium text-sky-700 hover:underline break-words;
   }
   .wp-post code {
     @apply bg-slate-100 text-slate-950 break-words;
