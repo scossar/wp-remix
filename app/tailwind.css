@@ -13,14 +13,26 @@
   .wp-post p {
     @apply my-2;
   }
-  .wp-post code,
-  .wp-post pre {
-    @apply overflow-scroll bg-slate-100 text-slate-950;
+  .wp-excerpt a,
+  .wp-post a {
+    @apply font-medium text-blue-600 hover:underline;
+  }
+  .wp-post code {
+    @apply bg-slate-100 text-slate-950 whitespace-pre;
   }
   .wp-post .wp-block-code {
-    @apply my-3;
+    @apply border-slate-950 bg-slate-100 border-2 p-2 my-3;
   }
-  .wp-post iframe {
+  .wp-post .wp-block-code code {
+    @apply block text-sm overflow-x-auto leading-5;
+  }
+  .wp-post .wp-post iframe {
     @apply max-w-full;
+  }
+  .wp-post ul {
+    @apply list-disc;
+  }
+  .wp-post ol {
+    @apply list-decimal;
   }
 }

@@ -9,6 +9,7 @@ import {
 } from "@remix-run/react";
 
 import Header from "~/components/Header";
+import Footer from "~/components/Footer";
 import styles from "./tailwind.css";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -23,12 +24,15 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="min-h-screen flex flex-col">
         <Header />
-        <Outlet />
+        <div className="flex-1">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <Footer />
       </body>
     </html>
   );
