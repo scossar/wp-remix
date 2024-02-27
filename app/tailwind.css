@@ -15,16 +15,16 @@
   }
   .wp-excerpt a,
   .wp-post a {
-    @apply font-medium text-blue-600 hover:underline;
+    @apply font-medium text-blue-600 hover:underline break-words;
   }
   .wp-post code {
-    @apply bg-slate-100 text-slate-950 whitespace-pre;
+    @apply bg-slate-100 text-slate-950 break-words;
   }
   .wp-post .wp-block-code {
     @apply border-slate-950 bg-slate-100 border-2 p-2 my-3;
   }
   .wp-post .wp-block-code code {
-    @apply block text-sm overflow-x-auto leading-5;
+    @apply block text-sm overflow-x-auto leading-5 whitespace-pre;
   }
   .wp-post .wp-post iframe {
     @apply max-w-full;
