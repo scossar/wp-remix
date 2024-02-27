@@ -17,12 +17,18 @@ export const meta: MetaFunction = ({ data }) => {
   const imageUrl = post?.featuredImage?.node?.sourceUrl
     ? post.featuredImage.node.sourceUrl
     : "";
+  const url = post?.slug
+    ? `https://hello.zalgorithm.com/blog/${post.slug}`
+    : "";
+
   return [
     { title: title },
     { description: description },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
+    { property: "og:url", url },
     { property: "og:image", content: imageUrl },
+    { property: "og:type", content: "website" },
   ];
 };
 
