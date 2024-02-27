@@ -32,6 +32,7 @@ export const POST_BY_SLUG_QUERY = gql(`
 query GetPostBySlug ($id: ID!) {
   post(id: $id, idType: SLUG) {
     id
+    slug
     title
     content
     excerpt
