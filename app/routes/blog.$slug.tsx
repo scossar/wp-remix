@@ -1,9 +1,31 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { createApolloClient } from "lib/createApolloClient";
 import { POST_BY_SLUG_QUERY } from "~/models/wp_queries";
+import type { Post } from "~/graphql/__generated__/graphql";
+
+// todo: move the next two functions to a utility file
+function truncateText(text: string, maxLength: number): string {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength - 1) + "…"; // Using an ellipsis character
+}
+
+function stripHtml(html: string): string {
+  // do not parse HTML with regular expressions :)
+  return html.replace(/<[^>]*>/g, "");
+}
+
+export const meta: MetaFunction = ({ data }) => {
+  const post = data as Post;
+  const title = post?.title ? post.title : "Simon's blog";
+  let description = post?.excerpt
+    ? stripHtml(post.excerpt)
+    : `Read more about ${post.title} on Simon's Blog`;
+  description = truncateText(description, 160);
+  return [{ title: title }, { description: description }];
+};
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.slug, "params.slug is required");

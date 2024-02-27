@@ -34,6 +34,7 @@ query GetPostBySlug ($id: ID!) {
     id
     title
     content
+    excerpt
     date
     author {
       node {
