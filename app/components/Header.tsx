@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <header className="bg-slate-500 text-slate-50 text-xl p-3 flex justify-between items-center">
       <h1>
-        <Link to="/">Hello Zalgorithm</Link>
+        <Link to="/">Zalgorithm</Link>
       </h1>
       <div>
         <NavLink
