@@ -14,22 +14,32 @@ export const meta: MetaFunction = ({ data }) => {
     ? stripHtml(post.excerpt)
     : `Read more about ${post.title}`;
   description = truncateText(description, 160);
-  const imageUrl = post?.featuredImage?.node?.sourceUrl
-    ? post.featuredImage.node.sourceUrl
-    : "";
-  const url = post?.slug
-    ? `https://hello.zalgorithm.com/blog/${post.slug}`
-    : "";
 
-  return [
+  let metaTags = [
     { title: title },
     { description: description },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
-    { property: "og:url", content: url },
-    { property: "og:image", content: imageUrl },
     { property: "og:type", content: "website" },
   ];
+
+  if (post?.featuredImage?.node?.sourceUrl) {
+    metaTags.push({
+      property: "og:image",
+      content: post.featuredImage.node.sourceUrl,
+    });
+  }
+
+  // todo: can't use the uri property here, because it's pointing to the headless WordPress site
+  // instead of hardcoding the root domain here, set it as an environmental variable
+  if (post?.slug) {
+    metaTags.push({
+      property: "og:url",
+      content: `https://hello.zalgorithm.com/blog/${post.slug}`,
+    });
+  }
+
+  return metaTags;
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
