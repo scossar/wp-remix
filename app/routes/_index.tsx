@@ -19,6 +19,7 @@ export default function Index() {
         Click on the "Blog" link in the header to read some WordPress posts.
       </p>
       <p>This is a test, this is only a test...</p>
+      <p>This is yet another test...</p>
     </div>
   );
 }
