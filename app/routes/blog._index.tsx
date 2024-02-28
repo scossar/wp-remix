@@ -60,15 +60,16 @@ export default function BlogIndex() {
             key={edge.node.id}
           />
         ))}
-        <Link
-          className="text-2xl text-sky-700 font-medium hover:underline"
-          prefetch="intent"
-          to="archive"
-        >
-          See All Latest Posts
-        </Link>
-        <hr className="mt-2 mb-2 border-solid border-slate-900" />
       </div>
+      <Link
+        className="text-2xl text-sky-700 font-medium hover:underline pt-3 block"
+        prefetch="intent"
+        to="archive"
+      >
+        Post Archive
+      </Link>
+      <hr className="mt-2 mb-2 border-solid border-slate-900" />
+
       {categoryEdges.map((categoryEdge: RootQueryToCategoryConnectionEdge) => (
         <div key={categoryEdge.node.name}>
           <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold">
