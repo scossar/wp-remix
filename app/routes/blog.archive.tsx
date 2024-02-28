@@ -51,12 +51,14 @@ export default function Archive() {
           />
         ))}
       </div>
-      <div>
-        <p className="my-6 p-3 bg-slate-200 rounded-lg">
-          This archive page is a work in progress. Instead of seeing this
-          paragraph, you should be seeing a "Load More Posts" button. That's
-          coming soon...
-        </p>
+      <div className="py-3">
+        {pageInfo?.hasNextPage ? (
+          <button className="bg-slate-500 hover:bg-slate-700 text-slate-50 font-bold py-2 px-4 rounded">
+            Load More Posts
+          </button>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
