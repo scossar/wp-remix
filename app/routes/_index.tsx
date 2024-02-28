@@ -15,6 +15,9 @@ export default function Index() {
         I'm developing this site to learn about Remix and headless WordPress
         applications.
       </p>
+      <p>
+        Click on the "Blog" link in the header to read some WordPress posts.
+      </p>
     </div>
   );
 }
