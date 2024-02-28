@@ -21,7 +21,7 @@
     @apply bg-slate-200 text-slate-950 break-words;
   }
   .wp-post .wp-block-code {
-    @apply border-slate-950 bg-slate-100 border-2 p-2 my-3;
+    @apply border-slate-950 bg-slate-200 border-2 p-2 my-3;
   }
   .wp-post .wp-block-code code {
     @apply block text-sm overflow-x-auto leading-5 whitespace-pre;
