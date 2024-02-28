@@ -18,7 +18,7 @@
     @apply font-medium text-sky-700 hover:underline break-words;
   }
   .wp-post code {
-    @apply bg-slate-100 text-slate-950 break-words;
+    @apply bg-slate-200 text-slate-950 break-words;
   }
   .wp-post .wp-block-code {
     @apply border-slate-950 bg-slate-100 border-2 p-2 my-3;
