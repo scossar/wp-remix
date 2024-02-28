@@ -28,6 +28,37 @@ query GetPosts {
 }
 `);
 
+export const ARCHIVE_POSTS_QUERY = gql(`
+query ArchivePosts($after: String!) {
+    posts (first: 15, after: $after, where: {orderby: {field:DATE, order: DESC}}) {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          cursor
+          node {
+            id
+            title
+            date
+            slug
+            excerpt
+            author {
+              node {
+                name
+              }
+            }
+            featuredImage {
+              node {
+                altText
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
+}
+`);
+
 export const POST_BY_SLUG_QUERY = gql(`
 query GetPostBySlug ($id: ID!) {
   post(id: $id, idType: SLUG) {

@@ -1,5 +1,5 @@
 import { json, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 
 import { createApolloClient } from "lib/createApolloClient";
 import type {
@@ -60,6 +60,14 @@ export default function BlogIndex() {
             key={edge.node.id}
           />
         ))}
+        <Link
+          className="text-2xl text-sky-700 font-medium hover:underline"
+          prefetch="intent"
+          to="archive"
+        >
+          See All Latest Posts
+        </Link>
+        <hr className="mt-2 mb-2 border-solid border-slate-900" />
       </div>
       {categoryEdges.map((categoryEdge: RootQueryToCategoryConnectionEdge) => (
         <div key={categoryEdge.node.name}>
