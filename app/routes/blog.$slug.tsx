@@ -14,6 +14,10 @@ export const meta: MetaFunction = ({ data }) => {
     ? stripHtml(post.excerpt)
     : `Read more about ${post.title}`;
   description = truncateText(description, 160);
+  // todo: set BASE_URL as an environental variable so that it doesn't have to be hard coded here:
+  const url = post?.slug
+    ? `https://hello.zalgorithm.com/blog/${post.slug}`
+    : "";
 
   let metaTags = [
     { title: title },
@@ -21,21 +25,13 @@ export const meta: MetaFunction = ({ data }) => {
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: "website" },
+    { property: "og:url", content: url },
   ];
 
   if (post?.featuredImage?.node?.sourceUrl) {
     metaTags.push({
       property: "og:image",
       content: post.featuredImage.node.sourceUrl,
-    });
-  }
-
-  // todo: can't use the uri property here, because it's pointing to the headless WordPress site
-  // instead of hardcoding the root domain here, set it as an environmental variable
-  if (post?.slug) {
-    metaTags.push({
-      property: "og:url",
-      content: `https://hello.zalgorithm.com/blog/${post.slug}`,
     });
   }
 
