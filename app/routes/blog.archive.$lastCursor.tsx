@@ -1,19 +1,21 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
-
-import invariant from "tiny-invariant";
+import { LoaderFunctionArgs, json, MetaFunction } from "@remix-run/node";
+import { Link, useLoaderData, useRouteError } from "@remix-run/react";
 
 import { createApolloClient } from "lib/createApolloClient";
 import { ARCHIVE_POSTS_QUERY } from "~/models/wp_queries";
 import type { PostConnectionEdge } from "~/graphql/__generated__/graphql";
 import PostExcerptCard from "~/components/PostExcerptCard";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const form = await request.formData();
-  const cursor = form.get("lastCursor");
-  // guessing a bit here, proper error handling is coming soon
-  invariant(cursor, "lastCursor wasn't set for the route");
+// todo: improve this and add og tags
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Zalgorithm blog archive" },
+    { description: "Zalgorithm blog archive" },
+  ];
+};
 
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  const cursor = params.lastCursor || "";
   const client = createApolloClient();
   const response = await client.query({
     query: ARCHIVE_POSTS_QUERY,
@@ -22,9 +24,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     },
   });
 
-  if (response.errors) {
-    // do something, anything...
-    console.log("An error was returned from the ARCHIVE_POSTS_QUERY");
+  if (response.errors || !response?.data) {
+    throw new Error("An error was returned loading the post archive.");
   }
 
   const data = response?.data;
@@ -32,7 +33,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const postEdges = data?.posts?.edges;
   const lastCursor = postEdges?.[postEdges.length - 1]?.cursor;
 
-  // don't worry about errors for now
   return json({
     pageInfo: pageInfo,
     postEdges: postEdges,
@@ -41,7 +41,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function BlogArchiveNext() {
-  const { pageInfo, postEdges, lastCursor } = useActionData<typeof action>();
+  const { pageInfo, postEdges, lastCursor } = useLoaderData<typeof loader>();
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
       <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold">
@@ -62,19 +62,27 @@ export default function BlogArchiveNext() {
       </div>
       <div className="py-3">
         {pageInfo?.hasNextPage && lastCursor ? (
-          <Form method="post" action="next">
-            <input type="hidden" name="lastCursor" value={lastCursor} />
-            <button
-              type="submit"
-              className="bg-slate-500 hover:bg-slate-700 text-slate-50 font-bold py-2 px-4 rounded"
-            >
-              Next Page
-            </button>
-          </Form>
-        ) : (
-          ""
-        )}
+          <Link
+            prefetch="intent"
+            to={`/blog/archive/${lastCursor}`}
+            className="bg-slate-500 hover:bg-slate-700 text-slate-50 font-bold py-2 px-4 rounded"
+          >
+            Next Posts
+          </Link>
+        ) : null}
       </div>
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  const errorMessage = error instanceof Error ? error.message : "Unknown error";
+  return (
+    <div className="mx-auto max-w-3xl px-5 py-4 my-10 bg-red-200 border-2 border-red-700 rounded break-all">
+      <h1>App Error</h1>
+      <pre>{errorMessage}</pre>
     </div>
   );
 }

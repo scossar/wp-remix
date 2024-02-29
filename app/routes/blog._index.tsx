@@ -1,5 +1,5 @@
 import { json, MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useRouteError, useLoaderData } from "@remix-run/react";
 
 import { createApolloClient } from "lib/createApolloClient";
 import type {
@@ -11,8 +11,8 @@ import PostExcerptCard from "~/components/PostExcerptCard";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Simon's Blog" },
-    { name: "description", content: "Simon Cossar's blog" },
+    { title: "Zalgorithm" },
+    { name: "description", content: "Simon's blog" },
   ];
 };
 
@@ -23,10 +23,7 @@ export async function loader() {
   });
 
   if (response.errors) {
-    // todo: handle the error
-    console.log(
-      "An unhandled error was returned from the INDEX_PAGE_POSTS_QUERY"
-    );
+    throw new Error("Unable to load posts.");
   }
 
   // if this isn't set, an error should already have been thrown
@@ -93,6 +90,18 @@ export default function BlogIndex() {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  const errorMessage = error instanceof Error ? error.message : "Unknown error";
+  return (
+    <div className="mx-auto max-w-2xl px-20 py-4 my-10 bg-red-200 border-2 border-red-700 rounded">
+      <h1>App Error</h1>
+      <pre>{errorMessage}</pre>
     </div>
   );
 }

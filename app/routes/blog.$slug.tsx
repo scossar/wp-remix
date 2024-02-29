@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useRouteError } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { createApolloClient } from "lib/createApolloClient";
@@ -9,6 +9,15 @@ import { stripHtml, truncateText } from "~/utils/utilities";
 
 export const meta: MetaFunction = ({ data }) => {
   const post = data as Post;
+  // Without this condition, errors in the loader function will cause an unhandled
+  // error in the meta function.
+  if (!post || !post?.title) {
+    return [
+      { title: "Error Page" },
+      { description: "An error occurred while loading the post." },
+    ];
+  }
+
   const title = post?.title ? post.title : "Simon's blog";
   let description = post?.excerpt
     ? stripHtml(post.excerpt)
@@ -49,16 +58,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     },
   });
 
-  const post = response?.data?.post;
-
-  // todo: improve this
-  if (!post) {
-    throw new Response(`Post not found for slug: ${slug}`, {
-      status: 404,
-    });
+  if (response.errors || !response?.data?.post) {
+    throw new Error(`Post not found for slug: ${slug}`);
   }
 
-  return post;
+  return response?.data?.post;
 };
 
 export default function BlogPost() {
@@ -112,6 +116,18 @@ export default function BlogPost() {
         className="text-slate-800 wp-post"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  const errorMessage = error instanceof Error ? error.message : "Unknown error";
+  return (
+    <div className="mx-auto max-w-3xl px-5 py-4 my-10 bg-red-200 border-2 border-red-700 rounded">
+      <h1>App Error</h1>
+      <pre className="break-all">{errorMessage}</pre>
     </div>
   );
 }
