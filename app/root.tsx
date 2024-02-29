@@ -54,7 +54,7 @@ export function ErrorBoundary() {
 
   const errorMessage = error instanceof Error ? error.message : "Unknown error";
   return (
-    <Document title="Uh-oh!">
+    <Document>
       <div className="mx-auto max-w-2xl px-20 py-4 my-10 bg-red-200 border rounded">
         <h1>App Error</h1>
         <pre>{errorMessage}</pre>
