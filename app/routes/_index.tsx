@@ -12,7 +12,7 @@ export default function Index() {
   return (
     <div className="max-w-md mx-auto my-2">
       <h2 className="text-3xl my-1">Hello Zalgorithm!</h2>
-      <p className="my-1">Zalgorithm: a zigzag algorithm.</p>
+      <p className="my-1">This is a test. This is only a test...</p>
     </div>
   );
 }
