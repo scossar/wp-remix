@@ -45,7 +45,7 @@
     @apply rounded-md shadow-xl;
   }
   .wp-post .wp-block-quote {
-    @apply border-l border-slate-600 pl-4 font-medium;
+    @apply border-l border-slate-600 pl-12 font-medium;
   }
   .wp-post .wp-block-quote cite {
     @apply font-normal text-sm italic;
