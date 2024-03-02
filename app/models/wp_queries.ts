@@ -28,9 +28,23 @@ query GetPosts {
 }
 `);
 
+export const ARCHIVE_CURSORS_QUERY = gql(`
+query ArchiveCursors($after: String!) {
+    posts (first: 100, after: $after, where: {orderby: {field:DATE, order: DESC}} ) {
+        pageInfo {
+            hasNextPage
+            endCursor
+            } 
+        edges {
+            cursor
+        }
+    }
+}
+`);
+
 export const ARCHIVE_POSTS_QUERY = gql(`
 query ArchivePosts($after: String!) {
-    posts (first: 15, after: $after, where: {orderby: {field:DATE, order: DESC}}) {
+    posts (first: 5, after: $after, where: {orderby: {field:DATE, order: DESC}}) {
         pageInfo {
           hasNextPage
         }
