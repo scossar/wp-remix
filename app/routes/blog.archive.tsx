@@ -25,44 +25,52 @@ interface FetcherTypeData {
 export const loader = async ({ request }: { request: Request }) => {
   const url = new URL(request.url);
   const after = url.searchParams.get("lastCursor") || "";
+  const pageNumber = url.searchParams.get("pageNumber");
+  let pages;
 
   const client = createApolloClient();
 
-  // it should be possible to avoid re-running this query if `after` is set!
-  const cursorQueryResponse = await client.query({
-    query: ARCHIVE_CURSORS_QUERY,
-    variables: {
-      after: "",
-    },
-  });
+  if (!after && !pageNumber) {
+    const cursorQueryResponse = await client.query({
+      query: ARCHIVE_CURSORS_QUERY,
+      variables: {
+        after: "",
+      },
+    });
 
-  if (cursorQueryResponse.errors || !cursorQueryResponse?.data?.posts?.edges) {
-    throw new Error("Unable to load post details.");
+    if (
+      cursorQueryResponse.errors ||
+      !cursorQueryResponse?.data?.posts?.edges
+    ) {
+      throw new Error("Unable to load post details.");
+    }
+
+    const chunkSize = Number(process.env?.ARCHIVE_CHUNK_SIZE) || 15;
+    const cursorEdges = cursorQueryResponse.data.posts.edges;
+    pages = cursorEdges.reduce(
+      (
+        acc: { lastCursor: Maybe<string | null>; pageNumber: number }[],
+        edge: RootQueryToPostConnectionEdge,
+        index: number
+      ) => {
+        if ((index + 1) % chunkSize === 0) {
+          acc.push({
+            lastCursor: edge.cursor,
+            pageNumber: acc.length + 1,
+          });
+        }
+        return acc;
+      },
+      []
+    );
+
+    pages.unshift({
+      lastCursor: "",
+      pageNumber: 0,
+    });
+  } else {
+    pages = [];
   }
-
-  const chunkSize = Number(process.env?.ARCHIVE_CHUNK_SIZE) || 15;
-  const cursorEdges = cursorQueryResponse.data.posts.edges;
-  const pages = cursorEdges.reduce(
-    (
-      acc: { lastCursor: Maybe<string | null>; pageNumber: number }[],
-      edge: RootQueryToPostConnectionEdge,
-      index: number
-    ) => {
-      if ((index + 1) % chunkSize === 0) {
-        acc.push({
-          lastCursor: edge.cursor,
-          pageNumber: acc.length + 1,
-        });
-      }
-      return acc;
-    },
-    []
-  );
-
-  pages.unshift({
-    lastCursor: "",
-    pageNumber: 0,
-  });
 
   const postsQueryResponse = await client.query({
     query: ARCHIVE_POSTS_QUERY,
@@ -116,6 +124,7 @@ export default function Archive() {
           key={page.pageNumber}
         >
           <input type="hidden" name="lastCursor" value={page.lastCursor} />
+          <input type="hidden" name="pageNumber" value={page.pageNumber} />
           <button type="submit">{page.pageNumber + 1}</button>
         </fetcher.Form>
       ))}
