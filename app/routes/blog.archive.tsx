@@ -20,6 +20,7 @@ interface Page {
 
 interface FetcherTypeData {
   postEdges: PostConnectionEdge;
+  pageNumber: number;
 }
 
 export const loader = async ({ request }: { request: Request }) => {
@@ -63,6 +64,10 @@ export const loader = async ({ request }: { request: Request }) => {
       },
       []
     );
+    // handle the case of the chunk size being a multiple of the total number of posts.
+    if (cursorEdges.length % chunkSize === 0) {
+      pages.pop();
+    }
 
     pages.unshift({
       lastCursor: "",
@@ -85,7 +90,7 @@ export const loader = async ({ request }: { request: Request }) => {
 
   const postEdges = postsQueryResponse.data.posts.edges;
 
-  return json({ pages: pages, postEdges: postEdges });
+  return json({ pages: pages, postEdges: postEdges, pageNumber: pageNumber });
 };
 
 export default function Archive() {
@@ -93,9 +98,11 @@ export default function Archive() {
   let postEdges = initialData.postEdges;
   const fetcher = useFetcher();
   const fetcherData = fetcher.data as FetcherTypeData;
+  let currentPageNumber: number;
 
   if (fetcherData && fetcherData?.postEdges) {
     postEdges = fetcherData.postEdges;
+    currentPageNumber = Number(fetcherData?.pageNumber);
   }
 
   return (
@@ -116,18 +123,24 @@ export default function Archive() {
           />
         ))}
       </div>
-      {initialData.pages.map((page: Page) => (
-        <fetcher.Form
-          action="?"
-          method="get"
-          className="inline-block px-3 mx-3 border border-slate-300"
-          key={page.pageNumber}
-        >
-          <input type="hidden" name="lastCursor" value={page.lastCursor} />
-          <input type="hidden" name="pageNumber" value={page.pageNumber} />
-          <button type="submit">{page.pageNumber + 1}</button>
-        </fetcher.Form>
-      ))}
+      <div className="mt-4">
+        {initialData.pages.map((page: Page) => (
+          <fetcher.Form
+            action="?"
+            method="get"
+            className={`inline-block px-3 mx-3 border border-slate-300 ${
+              currentPageNumber === page.pageNumber
+                ? "bg-red-200"
+                : "bg-blue-200"
+            }`}
+            key={page.pageNumber}
+          >
+            <input type="hidden" name="lastCursor" value={page.lastCursor} />
+            <input type="hidden" name="pageNumber" value={page.pageNumber} />
+            <button type="submit">{page.pageNumber + 1}</button>
+          </fetcher.Form>
+        ))}
+      </div>
     </div>
   );
 }
