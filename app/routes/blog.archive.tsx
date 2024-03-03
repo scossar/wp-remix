@@ -1,146 +1,85 @@
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
+import { json } from "@remix-run/node";
+import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
 import { Maybe } from "graphql/jsutils/Maybe";
 
 import { createApolloClient } from "lib/createApolloClient";
-import {
-  ARCHIVE_CURSORS_QUERY,
-  ARCHIVE_POSTS_QUERY,
-} from "~/models/wp_queries";
-import type {
-  PostConnectionEdge,
-  RootQueryToPostConnectionEdge,
-} from "~/graphql/__generated__/graphql";
-import PostExcerptCard from "~/components/PostExcerptCard";
+import { ARCHIVE_CURSORS_QUERY } from "~/models/wp_queries";
+import type { RootQueryToPostConnectionEdge } from "~/graphql/__generated__/graphql";
 
 interface Page {
   pageNumber: number;
   lastCursor: string;
 }
 
-interface FetcherTypeData {
-  postEdges: PostConnectionEdge;
-  pageNumber: number;
-}
-
-export const loader = async ({ request }: { request: Request }) => {
-  const url = new URL(request.url);
-  const after = url.searchParams.get("lastCursor") || "";
-  const pageNumber = url.searchParams.get("pageNumber");
-  let pages;
-
+export const loader = async () => {
   const client = createApolloClient();
 
-  if (!after && !pageNumber) {
-    const cursorQueryResponse = await client.query({
-      query: ARCHIVE_CURSORS_QUERY,
-      variables: {
-        after: "",
-      },
-    });
-
-    if (
-      cursorQueryResponse.errors ||
-      !cursorQueryResponse?.data?.posts?.edges
-    ) {
-      throw new Error("Unable to load post details.");
-    }
-
-    const chunkSize = Number(process.env?.ARCHIVE_CHUNK_SIZE) || 15;
-    const cursorEdges = cursorQueryResponse.data.posts.edges;
-    pages = cursorEdges.reduce(
-      (
-        acc: { lastCursor: Maybe<string | null>; pageNumber: number }[],
-        edge: RootQueryToPostConnectionEdge,
-        index: number
-      ) => {
-        if ((index + 1) % chunkSize === 0) {
-          acc.push({
-            lastCursor: edge.cursor,
-            pageNumber: acc.length + 1,
-          });
-        }
-        return acc;
-      },
-      []
-    );
-    // handle the case of the chunk size being a multiple of the total number of posts.
-    if (cursorEdges.length % chunkSize === 0) {
-      pages.pop();
-    }
-
-    pages.unshift({
-      lastCursor: "",
-      pageNumber: 0,
-    });
-  } else {
-    pages = [];
-  }
-
-  const postsQueryResponse = await client.query({
-    query: ARCHIVE_POSTS_QUERY,
+  const response = await client.query({
+    query: ARCHIVE_CURSORS_QUERY,
     variables: {
-      after: after,
+      after: "",
     },
   });
 
-  if (postsQueryResponse.errors || !postsQueryResponse?.data?.posts?.edges) {
-    throw new Error("An error was returned loading the posts");
+  if (response.errors || !response?.data?.posts?.edges) {
+    throw new Error("Unable to load post details.");
   }
 
-  const postEdges = postsQueryResponse.data.posts.edges;
+  const chunkSize = Number(process.env?.ARCHIVE_CHUNK_SIZE) || 15;
+  const cursorEdges = response.data.posts.edges;
+  const pages = cursorEdges.reduce(
+    (
+      acc: { lastCursor: Maybe<string | null>; pageNumber: number }[],
+      edge: RootQueryToPostConnectionEdge,
+      index: number
+    ) => {
+      if ((index + 1) % chunkSize === 0) {
+        acc.push({
+          lastCursor: edge.cursor,
+          pageNumber: acc.length + 1,
+        });
+      }
+      return acc;
+    },
+    []
+  );
+  // handle the case of the chunk size being a multiple of the total number of posts.
+  if (cursorEdges.length % chunkSize === 0) {
+    pages.pop();
+  }
 
-  return json({ pages: pages, postEdges: postEdges, pageNumber: pageNumber });
+  // add a first page object (lastCursor: "")
+  pages.unshift({
+    lastCursor: "",
+    pageNumber: 0,
+  });
+
+  return json({ pages: pages });
 };
 
 export default function Archive() {
-  const initialData = useLoaderData<typeof loader>();
-  let postEdges = initialData.postEdges;
-  const fetcher = useFetcher();
-  const fetcherData = fetcher.data as FetcherTypeData;
-  let currentPageNumber: number;
-
-  if (fetcherData && fetcherData?.postEdges) {
-    postEdges = fetcherData.postEdges;
-    currentPageNumber = Number(fetcherData?.pageNumber);
-  }
+  const { pages } = useLoaderData<typeof loader>();
 
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
       <h2 className="text-3xl py-3">
         Working on a new archive page for the blog
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {postEdges.map((edge: PostConnectionEdge) => (
-          <PostExcerptCard
-            title={edge.node?.title}
-            date={edge.node?.date}
-            featuredImage={edge.node?.featuredImage?.node?.sourceUrl}
-            excerpt={edge.node?.excerpt}
-            authorName={edge.node?.author?.node?.name}
-            slug={edge.node?.slug}
-            key={edge.node.id}
-          />
-        ))}
-      </div>
-      <div className="mt-4">
-        {initialData.pages.map((page: Page) => (
-          <fetcher.Form
-            action="?"
-            method="get"
-            className={`inline-block px-3 mx-3 border border-slate-300 ${
-              currentPageNumber === page.pageNumber
-                ? "bg-red-200"
-                : "bg-blue-200"
-            }`}
-            key={page.pageNumber}
-          >
-            <input type="hidden" name="lastCursor" value={page.lastCursor} />
-            <input type="hidden" name="pageNumber" value={page.pageNumber} />
-            <button type="submit">{page.pageNumber + 1}</button>
-          </fetcher.Form>
-        ))}
-      </div>
+      <Outlet />
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+      {pages.map((page: Page) => (
+        <Link
+          prefetch="intent"
+          to={{
+            pathname: String(page.pageNumber),
+            search: `?cursor=${page.lastCursor}`,
+          }}
+          className="px-3 py-2 mx-3 hover:underline text-sky-700"
+          key={page.pageNumber}
+        >
+          {page.pageNumber + 1}
+        </Link>
+      ))}
     </div>
   );
 }
