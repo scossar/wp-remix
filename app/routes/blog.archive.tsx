@@ -14,6 +14,8 @@ interface Page {
 export const loader = async () => {
   const client = createApolloClient();
 
+  // todo: make sure this request isn't re-run when a navigation element is clicked in the UI
+  // have a look at the `shouldRevalidate` docs!
   const response = await client.query({
     query: ARCHIVE_CURSORS_QUERY,
     variables: {
@@ -62,18 +64,13 @@ export default function Archive() {
 
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
-      <h2 className="text-3xl py-3">
-        Working on a new archive page for the blog
-      </h2>
+      <h2 className="text-3xl py-3">Post Archive</h2>
       <Outlet />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
       {pages.map((page: Page) => (
         <Link
           prefetch="intent"
-          to={{
-            pathname: String(page.pageNumber),
-            search: `?cursor=${page.lastCursor}`,
-          }}
+          to={`?cursor=${page.lastCursor}`}
           className="px-3 py-2 mx-3 hover:underline text-sky-700"
           key={page.pageNumber}
         >
