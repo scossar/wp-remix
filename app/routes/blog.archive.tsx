@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import type { ShouldRevalidateFunction } from "@remix-run/react";
 import { Maybe } from "graphql/jsutils/Maybe";
 
 import { createApolloClient } from "lib/createApolloClient";
@@ -11,11 +12,24 @@ interface Page {
   lastCursor: string;
 }
 
+// If `cursor` isn't set, re-run the loader function.
+// todo: look into this some more. The risk is that it could prevent the navigation UI from rendering.
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  currentUrl,
+  defaultShouldRevalidate,
+}) => {
+  const { searchParams } = new URL(currentUrl);
+  const cursor = searchParams.get("cursor");
+
+  if (cursor) {
+    return false;
+  }
+
+  return defaultShouldRevalidate;
+};
+
 export const loader = async () => {
   const client = createApolloClient();
-
-  // todo: make sure this request isn't re-run when a navigation element is clicked in the UI
-  // have a look at the `shouldRevalidate` docs!
   const response = await client.query({
     query: ARCHIVE_CURSORS_QUERY,
     variables: {
