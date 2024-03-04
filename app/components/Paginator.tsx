@@ -13,7 +13,7 @@ export default function Paginator({ pages, currentPage }: PaginatorProps) {
     currentPage < pages.length - 1 ? pages[currentPage + 1].lastCursor : null;
   return (
     <div>
-      {previousCursor ? (
+      {previousCursor || previousCursor === "" ? (
         <Link
           to={`?page=${currentPage - 1}&cursor=${previousCursor}`}
           className="mr-1 my-3 py-3 text-sky-700 text-sm font-semibold hover:bg-sky-100 rounded"
