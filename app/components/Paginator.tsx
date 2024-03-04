@@ -7,7 +7,8 @@ interface PaginatorProps {
 }
 
 export default function Paginator({ pages, currentPage }: PaginatorProps) {
-  const previousCursor = currentPage > 0 ? pages[currentPage].lastCursor : null;
+  const previousCursor =
+    currentPage > 0 ? pages[currentPage - 1].lastCursor : null;
   const nextCursor =
     currentPage < pages.length - 1 ? pages[currentPage + 1].lastCursor : null;
   return (
