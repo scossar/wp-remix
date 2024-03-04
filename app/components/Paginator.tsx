@@ -2,7 +2,6 @@ import { Link } from "@remix-run/react";
 import { Page } from "~/types/Page";
 
 interface PaginatorProps {
-  // todo: set a type!
   pages: Page[];
   currentPage: number;
 }

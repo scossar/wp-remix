@@ -44,7 +44,7 @@ query ArchiveCursors($after: String!) {
 
 export const ARCHIVE_POSTS_QUERY = gql(`
 query ArchivePosts($after: String!) {
-    posts (first: 5, after: $after, where: {orderby: {field:DATE, order: DESC}}) {
+    posts (first: 15, after: $after, where: {orderby: {field:DATE, order: DESC}}) {
         pageInfo {
           hasNextPage
         }
