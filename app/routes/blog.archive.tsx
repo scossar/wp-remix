@@ -1,20 +1,16 @@
-import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { Outlet, useLoaderData, useRouteError } from "@remix-run/react";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
 import { Maybe } from "graphql/jsutils/Maybe";
 
 import { createApolloClient } from "lib/createApolloClient";
 import { ARCHIVE_CURSORS_QUERY } from "~/models/wp_queries";
+import Paginator from "~/components/Paginator";
 import type { RootQueryToPostConnectionEdge } from "~/graphql/__generated__/graphql";
 
-interface Page {
-  pageNumber: number;
-  lastCursor: string;
-}
-
-// If `cursor` isn't set, re-run the loader function.
-// todo: look into this some more. The risk is that it could prevent the navigation UI from rendering.
-export const shouldRevalidate: ShouldRevalidateFunction = ({
+// Note: this works to prevent the loader function from being run when a navigation item is clicked, but
+// currently prevents `currentPage` value from being updated in the `Paginator` component.
+/*export const shouldRevalidate: ShouldRevalidateFunction = ({
   currentUrl,
   defaultShouldRevalidate,
 }) => {
@@ -26,9 +22,11 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   }
 
   return defaultShouldRevalidate;
-};
+};*/
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { searchParams } = new URL(request.url);
+  const currentPage = Number(searchParams.get("page")) || 0;
   const client = createApolloClient();
   const response = await client.query({
     query: ARCHIVE_CURSORS_QUERY,
@@ -70,27 +68,21 @@ export const loader = async () => {
     pageNumber: 0,
   });
 
-  return json({ pages: pages });
+  return json({ pages: pages, currentPage: currentPage });
 };
 
 export default function Archive() {
-  const { pages } = useLoaderData<typeof loader>();
+  const { pages, currentPage } = useLoaderData<typeof loader>();
 
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
       <h2 className="text-3xl py-3">Post Archive</h2>
       <Outlet />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
-      {pages.map((page: Page) => (
-        <Link
-          prefetch="intent"
-          to={`?cursor=${page.lastCursor}`}
-          className="px-3 py-2 mx-3 hover:underline text-sky-700"
-          key={page.pageNumber}
-        >
-          {page.pageNumber + 1}
-        </Link>
-      ))}
+      <hr className="m-6 border-solid border-slate-900" />
+      <div className="my-3 flex justify-center items-center h-full ">
+        <Paginator pages={pages} currentPage={currentPage} />
+      </div>
     </div>
   );
 }
