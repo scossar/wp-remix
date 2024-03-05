@@ -28,6 +28,7 @@ query GetPosts {
 }
 `);
 
+// todo: remove if not being used
 export const ARCHIVE_CURSORS_QUERY = gql(`
 query ArchiveCursors($after: String!) {
     posts (first: 100, after: $after, where: {orderby: {field:DATE, order: DESC}} ) {
@@ -42,6 +43,7 @@ query ArchiveCursors($after: String!) {
 }
 `);
 
+// todo: remove if not being used
 export const ARCHIVE_POSTS_QUERY = gql(`
 query ArchivePosts($after: String!) {
     posts (first: 15, after: $after, where: {orderby: {field:DATE, order: DESC}}) {
@@ -71,6 +73,46 @@ query ArchivePosts($after: String!) {
         }
       }
 }
+`);
+
+export const ARCHIVE_QUERY = gql(`
+query ArchiveQuery (
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+  ) {
+    posts(first: $first, last: $last, after: $after, before: $before) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          databaseId
+          title
+          date
+          slug
+          excerpt
+          author {
+            node {
+              name
+            }
+          }
+          featuredImage {
+            node {
+              altText
+              sourceUrl
+            }
+          }
+        }
+      }
+    }
+  }
 `);
 
 export const POST_BY_SLUG_QUERY = gql(`

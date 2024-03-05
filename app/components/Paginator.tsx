@@ -1,53 +1,24 @@
 import { Link } from "@remix-run/react";
-import { Page } from "~/types/Page";
+import type { RootQueryToPostConnectionPageInfo } from "~/graphql/__generated__/graphql";
 
 interface PaginatorProps {
-  pages: Page[];
-  currentPage: number;
+  pageInfo: RootQueryToPostConnectionPageInfo;
 }
 
-export default function Paginator({ pages, currentPage }: PaginatorProps) {
-  const previousCursor =
-    currentPage > 0 ? pages[currentPage - 1].lastCursor : null;
-  const nextCursor =
-    currentPage < pages.length - 1 ? pages[currentPage + 1].lastCursor : null;
+export default function Paginator({ pageInfo }: PaginatorProps) {
+  const { hasNextPage, hasPreviousPage, startCursor, endCursor } = pageInfo;
+
   return (
     <div>
-      {previousCursor || previousCursor === "" ? (
-        <Link
-          to={`?page=${currentPage - 1}&cursor=${previousCursor}`}
-          className="mr-1 my-3 py-3 text-sky-700 text-sm font-semibold hover:bg-sky-100 rounded"
-        >
-          Previous
-        </Link>
+      {hasPreviousPage && startCursor ? (
+        <Link to={`?startCursor=${startCursor}`}>Previous</Link>
       ) : (
-        <div className="inline-block mr-1 my-3 py-3 text-slate-500 font-light text-sm">
-          Previous
-        </div>
+        ""
       )}
-      {pages.map((page: Page) => (
-        <Link
-          prefetch="intent"
-          to={`?page=${page.pageNumber}&cursor=${page.lastCursor}`}
-          key={page.pageNumber}
-          className={`mr-1 my-3 p-2 text-sky-700 font-semibold hover:bg-sky-100 rounded text-sm ${
-            currentPage === page.pageNumber ? "bg-sky-200" : ""
-          }`}
-        >
-          {page.pageNumber + 1}
-        </Link>
-      ))}
-      {nextCursor ? (
-        <Link
-          to={`?page=${currentPage + 1}&cursor=${nextCursor}`}
-          className="ml-1 my-3 pl-3 text-sky-700 font-semibold hover:bg-sky-100 rounded"
-        >
-          Next
-        </Link>
+      {hasNextPage && endCursor ? (
+        <Link to={`?endCursor=${endCursor}`}>Next</Link>
       ) : (
-        <div className="inline-block mr-1 my-3 py-3 text-slate-500 font-light text-sm">
-          Next
-        </div>
+        ""
       )}
     </div>
   );

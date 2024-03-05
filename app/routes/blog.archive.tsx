@@ -1,87 +1,84 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Outlet, useLoaderData, useRouteError } from "@remix-run/react";
-import type { ShouldRevalidateFunction } from "@remix-run/react";
-import { Maybe } from "graphql/jsutils/Maybe";
-
+import { useLoaderData, useRouteError } from "@remix-run/react";
 import { createApolloClient } from "lib/createApolloClient";
-import { ARCHIVE_CURSORS_QUERY } from "~/models/wp_queries";
+import { ARCHIVE_QUERY } from "~/models/wp_queries";
 import Paginator from "~/components/Paginator";
-import type { RootQueryToPostConnectionEdge } from "~/graphql/__generated__/graphql";
+import { Maybe } from "graphql/jsutils/Maybe";
+import type { PostConnectionEdge } from "~/graphql/__generated__/graphql";
+import PostExcerptCard from "~/components/PostExcerptCard";
 
-// Note: this works to prevent the loader function from being run when a navigation item is clicked, but
-// currently prevents `currentPage` value from being updated in the `Paginator` component.
-/*export const shouldRevalidate: ShouldRevalidateFunction = ({
-  currentUrl,
-  defaultShouldRevalidate,
-}) => {
-  const { searchParams } = new URL(currentUrl);
-  const cursor = searchParams.get("cursor");
-
-  if (cursor) {
-    return false;
-  }
-
-  return defaultShouldRevalidate;
-};*/
+interface ArchiveQueryVariables {
+  first: Maybe<number>;
+  last: Maybe<number>;
+  after: Maybe<string>;
+  before: Maybe<string>;
+}
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { searchParams } = new URL(request.url);
-  const currentPage = Number(searchParams.get("page")) || 0;
+  const startCursor = searchParams.get("startCursor") ?? null;
+  const endCursor = searchParams.get("endCursor") ?? null;
+  const chunkSize = Number(process.env?.ARCHIVE_CHUNK_SIZE) || 15;
+
+  let queryVariables: ArchiveQueryVariables = {
+    first: null,
+    last: null,
+    after: null,
+    before: null,
+  };
+  if (endCursor) {
+    queryVariables.first = chunkSize;
+    queryVariables.after = endCursor;
+  } else if (startCursor) {
+    queryVariables.last = chunkSize;
+    queryVariables.before = startCursor;
+  } else {
+    queryVariables.first = chunkSize;
+  }
+
   const client = createApolloClient();
   const response = await client.query({
-    query: ARCHIVE_CURSORS_QUERY,
-    variables: {
-      after: "",
-    },
+    query: ARCHIVE_QUERY,
+    variables: queryVariables,
   });
 
-  if (response.errors || !response?.data?.posts?.edges) {
-    throw new Error("Unable to load post details.");
+  // note: the case of `response.data.posts.edges` being empty should be handled by the UI
+  if (response.errors || !response?.data?.posts?.pageInfo) {
+    throw new Error("An error was returned loading the posts.");
   }
 
-  const chunkSize = Number(process.env?.ARCHIVE_CHUNK_SIZE) || 15;
-  const cursorEdges = response.data.posts.edges;
-  const pages = cursorEdges.reduce(
-    (
-      acc: { lastCursor: Maybe<string | null>; pageNumber: number }[],
-      edge: RootQueryToPostConnectionEdge,
-      index: number
-    ) => {
-      if ((index + 1) % chunkSize === 0) {
-        acc.push({
-          lastCursor: edge.cursor,
-          pageNumber: acc.length + 1,
-        });
-      }
-      return acc;
-    },
-    []
-  );
-  // handle the case of the chunk size being a multiple of the total number of posts.
-  if (cursorEdges.length % chunkSize === 0) {
-    pages.pop();
-  }
+  // data for the Paginator component:
+  const pageInfo = response.data.posts.pageInfo;
+  // data for the PostExcerptCard components:
+  // if no RootQueryToPostConnectionEdge objects are returned, deal with it in the UI?
+  const postConnectionEdges = response.data.posts?.edges || [];
 
-  // add a first page object (lastCursor: "")
-  pages.unshift({
-    lastCursor: "",
-    pageNumber: 0,
-  });
-
-  return json({ pages: pages, currentPage: currentPage });
+  return json({ pageInfo: pageInfo, postConnectionEdges: postConnectionEdges });
 };
 
 export default function Archive() {
-  const { pages, currentPage } = useLoaderData<typeof loader>();
+  const { pageInfo, postConnectionEdges } = useLoaderData<typeof loader>();
 
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
       <h2 className="text-3xl py-3">Post Archive</h2>
-      <Outlet />
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
-      <hr className="m-6 border-solid border-slate-900" />
+      <div className="px-6 mx-auto max-w-screen-lg">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {postConnectionEdges.map((edge: PostConnectionEdge) => (
+            <PostExcerptCard
+              title={edge.node?.title}
+              date={edge.node?.date}
+              featuredImage={edge.node?.featuredImage?.node?.sourceUrl}
+              excerpt={edge.node?.excerpt}
+              authorName={edge.node?.author?.node?.name}
+              slug={edge.node?.slug}
+              key={edge.node.id}
+            />
+          ))}
+        </div>
+      </div>
       <div className="my-3 flex justify-center items-center h-full ">
-        <Paginator pages={pages} currentPage={currentPage} />
+        <Paginator pageInfo={pageInfo} />
       </div>
     </div>
   );
