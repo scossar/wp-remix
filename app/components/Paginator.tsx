@@ -11,12 +11,22 @@ export default function Paginator({ pageInfo }: PaginatorProps) {
   return (
     <div>
       {hasPreviousPage && startCursor ? (
-        <Link to={`?startCursor=${startCursor}`}>Previous</Link>
+        <Link
+          to={`?startCursor=${startCursor}`}
+          className="mr-6 px-3 py-2  bg-sky-700 hover:bg-sky-600 text-slate-50 rounded"
+        >
+          Previous
+        </Link>
       ) : (
         ""
       )}
       {hasNextPage && endCursor ? (
-        <Link to={`?endCursor=${endCursor}`}>Next</Link>
+        <Link
+          to={`?endCursor=${endCursor}`}
+          className="ml-6 px-3 py-2 bg-sky-700 hover:bg-sky-600 text-slate-50 rounded"
+        >
+          Next
+        </Link>
       ) : (
         ""
       )}

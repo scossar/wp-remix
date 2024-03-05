@@ -61,8 +61,11 @@ export default function Archive() {
 
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
-      <h2 className="text-3xl py-3">Post Archive</h2>
-      <div className="px-6 mx-auto max-w-screen-lg">
+      <div className="flex justify-center items-center h-full">
+        <h2 className="text-3xl py-3 font-serif">Post Archive</h2>
+      </div>
+      <hr className="border-solid border-slate-300" />
+      <div className="mx-auto max-w-screen-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {postConnectionEdges.map((edge: PostConnectionEdge) => (
             <PostExcerptCard
@@ -77,7 +80,8 @@ export default function Archive() {
           ))}
         </div>
       </div>
-      <div className="my-3 flex justify-center items-center h-full ">
+      <hr className="my-6 border-solid border-slate-300" />
+      <div className="my-3 flex justify-center items-center h-full">
         <Paginator pageInfo={pageInfo} />
       </div>
     </div>
