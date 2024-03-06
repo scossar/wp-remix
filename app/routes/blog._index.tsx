@@ -5,6 +5,7 @@ import { createApolloClient } from "lib/createApolloClient";
 import type {
   RootQueryToCategoryConnectionEdge,
   PostConnectionEdge,
+  TagToPostConnectionEdge,
 } from "~/graphql/__generated__/graphql";
 import { INDEX_PAGE_POSTS_QUERY } from "~/models/wp_queries";
 import PostExcerptCard from "~/components/PostExcerptCard";
@@ -26,44 +27,48 @@ export async function loader() {
     throw new Error("Unable to load posts.");
   }
 
-  // if this isn't set, an error should already have been thrown
   const data = response?.data;
-  const latestPostsEdges = data?.posts?.edges;
-  const categoryEdges = data?.categories?.edges;
+  const featuredPosts = data?.tags?.edges?.[0]?.node?.posts?.edges ?? [];
+  const categoryEdges = data?.categories?.edges ?? [];
+
+  if (featuredPosts.length === 0 && categoryEdges.length === 0) {
+    throw new Error("No posts were returned for the homepage.");
+  }
 
   return json({
-    latestPostsEdges: latestPostsEdges,
+    featuredPosts: featuredPosts,
     categoryEdges: categoryEdges,
   });
 }
 
 export default function BlogIndex() {
-  const { latestPostsEdges, categoryEdges } = useLoaderData<typeof loader>();
+  const { featuredPosts, categoryEdges } = useLoaderData<typeof loader>();
+
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
-      <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold">
-        Latest Posts
+      <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold text-center">
+        Simon's Blog
       </h2>
       <hr className="mt-2 mb-3 border-solid border-slate-900" />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {latestPostsEdges.map((edge: PostConnectionEdge) => (
+        {featuredPosts.map((postEdge: TagToPostConnectionEdge) => (
           <PostExcerptCard
-            title={edge.node?.title}
-            date={edge.node?.date}
-            featuredImage={edge.node?.featuredImage?.node?.sourceUrl}
-            excerpt={edge.node?.excerpt}
-            authorName={edge.node?.author?.node?.name}
-            slug={edge.node?.slug}
-            key={edge.node.id}
+            title={postEdge.node?.title}
+            date={postEdge.node?.date}
+            featuredImage={postEdge.node?.featuredImage?.node?.sourceUrl}
+            excerpt={postEdge.node?.excerpt}
+            authorName={postEdge.node.author?.node?.name}
+            slug={postEdge.node?.slug}
+            key={postEdge.node.id}
           />
         ))}
       </div>
       <Link
-        className="text-2xl text-sky-700 font-medium hover:underline pt-3 block"
+        className="text-2xl text-sky-700 font-medium hover:underline pt-3 block text-center"
         prefetch="intent"
         to="archive"
       >
-        Post Archive
+        Read all Posts
       </Link>
       <hr className="mt-2 mb-2 border-solid border-slate-900" />
 
