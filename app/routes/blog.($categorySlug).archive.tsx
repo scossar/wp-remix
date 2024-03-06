@@ -88,7 +88,7 @@ export default function Archive() {
         </h2>
       </div>
       <hr className="border-solid border-slate-300" />
-      <div className="mx-auto max-w-screen-lg">
+      <div className="mx-auto max-w-screen-lg pt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {postConnectionEdges.map((edge: PostConnectionEdge) => (
             <PostExcerptCard
