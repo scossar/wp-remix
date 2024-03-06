@@ -42,7 +42,13 @@
     @apply text-slate-900 text-2xl font-serif mt-3;
   }
   .wp-post img {
-    @apply rounded-md shadow-xl;
+    @apply rounded-md shadow-xl max-w-full;
+  }
+  .wp-post .wp-block-audio {
+    @apply flex justify-center items-center h-full;
+  }
+  .wp-post audio {
+    @apply my-6;
   }
   .wp-post .wp-block-quote {
     @apply border-l border-slate-600 pl-12 font-medium;
