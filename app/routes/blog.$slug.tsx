@@ -111,7 +111,7 @@ export default function BlogPost() {
       ) : (
         ""
       )}
-      <hr className="my-3 border-solid border-slate-900" />
+      <hr className="my-6 border-solid border-slate-400" />
       <div
         className="text-slate-800 wp-post"
         dangerouslySetInnerHTML={{ __html: post.content }}
