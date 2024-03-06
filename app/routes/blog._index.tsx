@@ -68,7 +68,7 @@ export default function BlogIndex() {
         prefetch="intent"
         to="archive"
       >
-        Read all posts
+        View all posts
       </Link>
 
       {categoryEdges.map((categoryEdge: RootQueryToCategoryConnectionEdge) => (
