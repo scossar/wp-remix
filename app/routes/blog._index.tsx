@@ -45,12 +45,12 @@ export default function BlogIndex() {
   const { featuredPosts, categoryEdges } = useLoaderData<typeof loader>();
 
   return (
-    <div className="px-6 mx-auto max-w-screen-lg">
+    <div className="px-6 pb-6 mx-auto max-w-screen-lg">
       <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold text-center">
         Simon's Blog
       </h2>
-      <hr className="mt-2 mb-3 border-solid border-slate-900" />
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <hr className="mt-2 mb-3 border-solid border-slate-400" />
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 py-3">
         {featuredPosts.map((postEdge: TagToPostConnectionEdge) => (
           <PostExcerptCard
             title={postEdge.node?.title}
@@ -64,20 +64,24 @@ export default function BlogIndex() {
         ))}
       </div>
       <Link
-        className="text-2xl text-sky-700 font-medium hover:underline pt-3 block text-center"
+        className="text-2xl text-sky-700 font-semibold font-serif hover:underline pt-3 block"
         prefetch="intent"
         to="archive"
       >
-        Read all Posts
+        Read all posts
       </Link>
-      <hr className="mt-2 mb-2 border-solid border-slate-900" />
 
       {categoryEdges.map((categoryEdge: RootQueryToCategoryConnectionEdge) => (
-        <div key={categoryEdge.node.name}>
-          <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold">
-            {categoryEdge.node.name}
-          </h2>
-          <hr className="mt-2 mb-3 border-solid border-slate-900" />
+        <div key={categoryEdge.node.name} className="py-3">
+          <hr className="mt-2 mb-2 border-solid border-slate-400" />
+          <Link
+            to={`${categoryEdge.node.slug}/archive`}
+            className="text-2xl text-sky-700 font-medium hover:underline pt-3"
+          >
+            <h2 className="text-3xl my-6 font-serif font-bold text-center">
+              {categoryEdge.node.name}
+            </h2>
+          </Link>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {categoryEdge.node?.posts?.edges.map(
               (postEdge: PostConnectionEdge) => (

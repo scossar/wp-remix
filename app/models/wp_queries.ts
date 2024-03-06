@@ -81,8 +81,9 @@ query ArchiveQuery (
     $last: Int
     $after: String
     $before: String
+    $categorySlug: String
   ) {
-    posts(first: $first, last: $last, after: $after, before: $before) {
+    posts(first: $first, last: $last, after: $after, before: $before, where: {categoryName: $categorySlug}) {
       pageInfo {
         hasNextPage
         hasPreviousPage
@@ -183,6 +184,7 @@ query getHomepagePosts {
     edges {
       node {
         name
+        slug
         posts(first: 5, where: {orderby: {field: DATE, order: DESC}}) {
           edges {
             node {
