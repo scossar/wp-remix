@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData, useRouteError } from "@remix-run/react";
+import { Link, useLoaderData, useRouteError } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { createApolloClient } from "lib/createApolloClient";
@@ -58,11 +58,18 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     },
   });
 
-  if (response.errors || !response?.data?.post) {
-    throw new Error(`Post not found for slug: ${slug}`);
+  if (response.errors) {
+    throw new Error(`An error was returned when querying for slug:\n${slug}`);
   }
 
-  return response?.data?.post;
+  const post = response?.data?.post ?? null;
+
+  if (!post) {
+    // todo: this should be handled gracefully
+    throw new Error(`No post was returned for slug: \n${slug}`);
+  }
+
+  return post;
 };
 
 export default function BlogPost() {
@@ -80,6 +87,10 @@ export default function BlogPost() {
         "0"
       )}`
     : "";
+  const previousTitle = post?.previousPost?.title;
+  const previousSlug = post?.previousPost?.slug;
+  const nextTitle = post?.nextPost?.title;
+  const nextSlug = post?.nextPost?.slug;
 
   return (
     <div className="mx-2 my-6 md:max-w-prose md:mx-auto">
@@ -116,6 +127,38 @@ export default function BlogPost() {
         className="text-slate-800 wp-post"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
+      <div className="my-3 grid grid-cols-1 min-[431px]:grid-cols-2 gap-4 items-center h-full">
+        {previousTitle && previousSlug ? (
+          <div>
+            <div>
+              <span className="text-5xl">&larr;</span>
+              <span>Previous</span>
+            </div>
+            <Link
+              prefetch="intent"
+              to={`/blog/${previousSlug}`}
+              className="text-lg font-bold text-sky-700 hover:underline"
+            >
+              {previousTitle}
+            </Link>
+          </div>
+        ) : null}
+        {nextTitle && nextSlug ? (
+          <div className="min-[431px]:text-right">
+            <div>
+              <span>Next</span>
+              <span className="text-5xl">&rarr;</span>
+            </div>
+            <Link
+              prefetch="intent"
+              to={`/blog/${nextSlug}`}
+              className="text-lg font-bold text-sky-700 hover:underline"
+            >
+              {nextTitle}
+            </Link>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

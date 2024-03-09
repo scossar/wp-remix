@@ -139,6 +139,14 @@ query GetPostBySlug ($id: ID!) {
         sourceUrl
       }
     }
+    previousPost {
+      title
+      slug
+    }
+    nextPost {
+      title
+      slug
+    }
   }
 }
 `);
