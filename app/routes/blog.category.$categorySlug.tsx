@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useRouteError } from "@remix-run/react";
+import { Outlet, useLoaderData, useRouteError } from "@remix-run/react";
 import { createApolloClient } from "lib/createApolloClient";
 import { ARCHIVE_QUERY } from "~/models/wp_queries";
 import Paginator from "~/components/Paginator";
