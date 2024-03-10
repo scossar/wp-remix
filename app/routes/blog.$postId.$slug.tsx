@@ -66,8 +66,10 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   const post = response?.data?.post ?? null;
 
   if (!post) {
-    // todo: this should be handled gracefully
-    throw new Error(`No post was returned for post: ${postId}`);
+    throw new Response(null, {
+      status: 404,
+      statusText: "Not Found",
+    });
   }
 
   return post;
@@ -167,13 +169,26 @@ export default function BlogPost() {
 }
 
 export function ErrorBoundary() {
-  const error = useRouteError();
+  const error: any = useRouteError();
+  const status = error?.status;
 
-  const errorMessage = error instanceof Error ? error.message : "Unknown error";
   return (
-    <div className="mx-auto max-w-3xl px-5 py-4 my-10 bg-red-200 border-2 border-red-700 rounded">
-      <h1>App Error</h1>
-      <pre className="break-all">{errorMessage}</pre>
+    <div className="px-2">
+      <div className="mx-auto max-w-3xl px-2 py-4 my-10 bg-sky-100 border-2 border-sky-700 rounded">
+        {status && status === 404 ? (
+          <h2 className="text-xl">
+            The page you were looking for could not be found
+          </h2>
+        ) : (
+          <h2 className="text-xl">Sorry, something has gone wrong</h2>
+        )}
+        <p className="pt-1">
+          Click this link to return to the blog's homepage:{" "}
+          <Link className="text-sky-800 font-bold" to="/blog">
+            Zalgorithm
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

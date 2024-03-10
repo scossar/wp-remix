@@ -67,7 +67,7 @@ export default function BlogIndex() {
       <Link
         className="text-2xl text-sky-700 font-semibold font-serif hover:underline pt-3 block"
         prefetch="intent"
-        to="archive"
+        to="posts"
       >
         View all posts
       </Link>
@@ -76,7 +76,7 @@ export default function BlogIndex() {
         <div key={categoryEdge.node.name} className="py-3">
           <hr className="mt-2 mb-2 border-solid border-slate-400" />
           <Link
-            to={`${categoryEdge.node.slug}/archive`}
+            to={`/blog/category/${categoryEdge.node.slug}`}
             className="text-2xl text-sky-700 font-medium hover:underline pt-3"
           >
             <h2 className="text-3xl my-6 font-serif font-bold text-center">
