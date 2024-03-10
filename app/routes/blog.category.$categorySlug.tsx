@@ -76,16 +76,14 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   });
 };
 
-export default function Archive() {
+export default function CategorySlug() {
   const { pageInfo, postConnectionEdges, categoryName } =
     useLoaderData<typeof loader>();
 
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
       <div className="flex justify-center items-center h-full">
-        <h2 className="text-3xl py-3 font-serif text-center">
-          {categoryName ? categoryName : "Post Archive"}
-        </h2>
+        <h2 className="text-3xl py-3 font-serif text-center">{categoryName}</h2>
       </div>
       <hr className="border-solid border-slate-300" />
       <div className="mx-auto max-w-screen-lg pt-6">

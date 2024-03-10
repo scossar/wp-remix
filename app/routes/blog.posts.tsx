@@ -12,12 +12,10 @@ interface ArchiveQueryVariables {
   last: Maybe<number>;
   after: Maybe<string>;
   before: Maybe<string>;
-  categorySlug: Maybe<string>;
 }
 
-export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { searchParams } = new URL(request.url);
-  const categorySlug = params?.categorySlug ?? null;
 
   const startCursor = searchParams.get("startCursor") ?? null;
   const endCursor = searchParams.get("endCursor") ?? null;
@@ -28,12 +26,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     last: null,
     after: null,
     before: null,
-    categorySlug: null,
   };
 
-  if (categorySlug) {
-    queryVariables.categorySlug = categorySlug;
-  }
   if (endCursor) {
     queryVariables.first = chunkSize;
     queryVariables.after = endCursor;
@@ -61,31 +55,19 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   // if no RootQueryToPostConnectionEdge objects are returned, deal with it in the UI?
   const postConnectionEdges = response.data.posts?.edges || [];
 
-  let categoryName;
-  if (categorySlug) {
-    categoryName = categorySlug
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  }
-
   return json({
     pageInfo: pageInfo,
     postConnectionEdges: postConnectionEdges,
-    categoryName: categoryName,
   });
 };
 
 export default function Archive() {
-  const { pageInfo, postConnectionEdges, categoryName } =
-    useLoaderData<typeof loader>();
+  const { pageInfo, postConnectionEdges } = useLoaderData<typeof loader>();
 
   return (
     <div className="px-6 mx-auto max-w-screen-lg">
       <div className="flex justify-center items-center h-full">
-        <h2 className="text-3xl py-3 font-serif text-center">
-          {categoryName ? categoryName : "Post Archive"}
-        </h2>
+        <h2 className="text-3xl py-3 font-serif text-center">Posts</h2>
       </div>
       <hr className="border-solid border-slate-300" />
       <div className="mx-auto max-w-screen-lg pt-6">
