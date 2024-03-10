@@ -61,7 +61,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 };
 
-export default function Archive() {
+export default function Posts() {
   const { pageInfo, postConnectionEdges } = useLoaderData<typeof loader>();
 
   return (
