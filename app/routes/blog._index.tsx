@@ -59,7 +59,8 @@ export default function BlogIndex() {
             excerpt={postEdge.node?.excerpt}
             authorName={postEdge.node.author?.node?.name}
             slug={postEdge.node?.slug}
-            key={postEdge.node.id}
+            databaseId={postEdge.node.databaseId}
+            key={postEdge.node.databaseId}
           />
         ))}
       </div>
@@ -92,7 +93,8 @@ export default function BlogIndex() {
                   excerpt={postEdge.node?.excerpt}
                   authorName={postEdge.node.author?.node?.name}
                   slug={postEdge.node?.slug}
-                  key={postEdge.node.id}
+                  databaseId={postEdge.node.databaseId}
+                  key={postEdge.node.databaseId}
                 />
               )
             )}

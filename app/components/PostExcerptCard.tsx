@@ -8,6 +8,7 @@ interface PostExcerptCardProps {
   excerpt: Maybe<string | null>;
   authorName: Maybe<string | null>;
   slug: Maybe<string | null>;
+  databaseId: number;
 }
 
 export default function PostExcerptCard({
@@ -17,6 +18,7 @@ export default function PostExcerptCard({
   excerpt,
   authorName,
   slug,
+  databaseId,
 }: PostExcerptCardProps) {
   const formattedDate = date
     ? `${new Date(date).getFullYear()}-${String(
@@ -27,7 +29,7 @@ export default function PostExcerptCard({
   return (
     <article>
       {featuredImage ? <img className="rounded-md" src={featuredImage} /> : ""}
-      <Link prefetch="intent" to={`/blog/${slug}`}>
+      <Link prefetch="intent" to={`/blog/${databaseId}/${slug}`}>
         <h3 className="text-xl font-serif font-bold mt-3 text-sky-700 hover:underline">
           {title}
         </h3>

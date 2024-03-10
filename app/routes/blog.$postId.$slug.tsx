@@ -3,7 +3,7 @@ import { Link, useLoaderData, useRouteError } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { createApolloClient } from "lib/createApolloClient";
-import { POST_BY_SLUG_QUERY } from "~/models/wp_queries";
+import { POST_BY_ID_QUERY } from "~/models/wp_queries";
 import type { Post } from "~/graphql/__generated__/graphql";
 import { stripHtml, truncateText } from "~/utils/utilities";
 
@@ -24,9 +24,10 @@ export const meta: MetaFunction = ({ data }) => {
     : `Read more about ${post.title}`;
   description = truncateText(description, 160);
   // todo: set BASE_URL as an environental variable so that it doesn't have to be hard coded here:
-  const url = post?.slug
-    ? `https://hello.zalgorithm.com/blog/${post.slug}`
-    : "";
+  const url =
+    post?.slug && post.databaseId
+      ? `https://hello.zalgorithm.com/blog/${post.databaseId}/${post.slug}`
+      : "";
 
   let metaTags = [
     { title: title },
@@ -48,25 +49,25 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  invariant(params.slug, "params.slug is required");
-  const slug = params.slug;
+  invariant(params.postId, "params.postId is required");
+  const postId = params?.postId;
   const client = createApolloClient();
   const response = await client.query({
-    query: POST_BY_SLUG_QUERY,
+    query: POST_BY_ID_QUERY,
     variables: {
-      id: slug,
+      id: postId,
     },
   });
 
   if (response.errors) {
-    throw new Error(`An error was returned when querying for slug:\n${slug}`);
+    throw new Error(`An error was returned when querying for post: ${postId}`);
   }
 
   const post = response?.data?.post ?? null;
 
   if (!post) {
     // todo: this should be handled gracefully
-    throw new Error(`No post was returned for slug: \n${slug}`);
+    throw new Error(`No post was returned for post: ${postId}`);
   }
 
   return post;
@@ -89,8 +90,10 @@ export default function BlogPost() {
     : "";
   const previousTitle = post?.previousPost?.title;
   const previousSlug = post?.previousPost?.slug;
+  const previousId = post?.previousPost?.databaseId;
   const nextTitle = post?.nextPost?.title;
   const nextSlug = post?.nextPost?.slug;
+  const nextId = post?.nextPost?.databaseId;
 
   return (
     <div className="mx-2 my-6 md:max-w-prose md:mx-auto">
@@ -128,7 +131,7 @@ export default function BlogPost() {
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
       <div className="my-3 grid grid-cols-1 min-[431px]:grid-cols-2 gap-4 items-center h-full">
-        {previousTitle && previousSlug ? (
+        {previousTitle && previousSlug && previousId ? (
           <div>
             <div>
               <span className="text-5xl">&larr;</span>
@@ -136,14 +139,14 @@ export default function BlogPost() {
             </div>
             <Link
               prefetch="intent"
-              to={`/blog/${previousSlug}`}
+              to={`/blog/${previousId}/${previousSlug}`}
               className="text-lg font-bold text-sky-700 hover:underline"
             >
               {previousTitle}
             </Link>
           </div>
         ) : null}
-        {nextTitle && nextSlug ? (
+        {nextTitle && nextSlug && nextId ? (
           <div className="min-[431px]:text-right">
             <div>
               <span>Next</span>
@@ -151,7 +154,7 @@ export default function BlogPost() {
             </div>
             <Link
               prefetch="intent"
-              to={`/blog/${nextSlug}`}
+              to={`/blog/${nextId}/${nextSlug}`}
               className="text-lg font-bold text-sky-700 hover:underline"
             >
               {nextTitle}

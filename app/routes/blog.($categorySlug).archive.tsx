@@ -98,7 +98,8 @@ export default function Archive() {
               excerpt={edge.node?.excerpt}
               authorName={edge.node?.author?.node?.name}
               slug={edge.node?.slug}
-              key={edge.node.id}
+              databaseId={edge.node.databaseId}
+              key={edge.node.databaseId}
             />
           ))}
         </div>

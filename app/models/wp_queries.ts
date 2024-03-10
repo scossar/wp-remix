@@ -116,6 +116,7 @@ query ArchiveQuery (
   }
 `);
 
+// todo: remove this once it's no longer being used
 export const POST_BY_SLUG_QUERY = gql(`
 query GetPostBySlug ($id: ID!) {
   post(id: $id, idType: SLUG) {
@@ -151,6 +152,43 @@ query GetPostBySlug ($id: ID!) {
 }
 `);
 
+export const POST_BY_ID_QUERY = gql(`
+query GetPostById ($id: ID!) {
+  post(id: $id, idType: DATABASE_ID) {
+    title
+    content
+    excerpt
+    slug
+    databaseId
+    date
+    author {
+      node {
+        name
+      }
+    }
+    featuredImage {
+      node {
+        altText
+        description
+        caption
+        id
+        sourceUrl
+      }
+    }
+    previousPost {
+      title
+      slug
+      databaseId
+    }
+    nextPost {
+      title
+      slug
+      databaseId
+    }
+  }
+}
+`);
+
 export const INDEX_PAGE_POSTS_QUERY = gql(`
 query getHomepagePosts {
     tags (where: {name: "featured"}) {
@@ -159,7 +197,7 @@ query getHomepagePosts {
         posts(first: 5, where: {orderby: {field: DATE, order: DESC}}) {
           edges {
             node {
-              id
+              databaseId
               title
               slug
               excerpt
@@ -196,7 +234,7 @@ query getHomepagePosts {
         posts(first: 5, where: {orderby: {field: DATE, order: DESC}}) {
           edges {
             node {
-              id
+              databaseId
               title
               slug
               excerpt
