@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { useLoaderData, useRouteError } from "@remix-run/react";
 import { createApolloClient } from "lib/createApolloClient";
 import { ARCHIVE_QUERY } from "~/models/wp_queries";
 import Paginator from "~/components/Paginator";
@@ -17,6 +17,7 @@ interface ArchiveQueryVariables {
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { searchParams } = new URL(request.url);
+  // todo: should this really be optional? (Note that this code was copied from blog.posts.tsx)
   const categorySlug = params?.categorySlug ?? null;
 
   const startCursor = searchParams.get("startCursor") ?? null;
@@ -72,12 +73,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   return json({
     pageInfo: pageInfo,
     postConnectionEdges: postConnectionEdges,
+    categorySlug: categorySlug,
     categoryName: categoryName,
   });
 };
 
 export default function CategorySlug() {
-  const { pageInfo, postConnectionEdges, categoryName } =
+  const { pageInfo, postConnectionEdges, categorySlug, categoryName } =
     useLoaderData<typeof loader>();
 
   return (
@@ -96,6 +98,9 @@ export default function CategorySlug() {
               excerpt={edge.node?.excerpt}
               authorName={edge.node?.author?.node?.name}
               slug={edge.node?.slug}
+              basePath={
+                categorySlug ? `/blog/category/${categorySlug}` : `/blog`
+              }
               databaseId={edge.node.databaseId}
               key={edge.node.databaseId}
             />

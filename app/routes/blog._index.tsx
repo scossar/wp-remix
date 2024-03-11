@@ -43,6 +43,8 @@ export async function loader() {
 
 export default function BlogIndex() {
   const { featuredPosts, categoryEdges } = useLoaderData<typeof loader>();
+  // use the same basePath for featured and category PostExcerptCards for now
+  const basePath = "/blog";
 
   return (
     <div className="px-6 pb-6 mx-auto max-w-screen-lg">
@@ -59,6 +61,7 @@ export default function BlogIndex() {
             excerpt={postEdge.node?.excerpt}
             authorName={postEdge.node.author?.node?.name}
             slug={postEdge.node?.slug}
+            basePath={basePath}
             databaseId={postEdge.node.databaseId}
             key={postEdge.node.databaseId}
           />
@@ -93,6 +96,7 @@ export default function BlogIndex() {
                   excerpt={postEdge.node?.excerpt}
                   authorName={postEdge.node.author?.node?.name}
                   slug={postEdge.node?.slug}
+                  basePath={basePath}
                   databaseId={postEdge.node.databaseId}
                   key={postEdge.node.databaseId}
                 />
