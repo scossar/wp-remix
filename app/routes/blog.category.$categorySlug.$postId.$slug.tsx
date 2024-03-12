@@ -1,14 +1,19 @@
+import { json } from "@remix-run/node";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData, useRouteError } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { createApolloClient } from "lib/createApolloClient";
-import { POST_BY_ID_QUERY } from "~/models/wp_queries";
+import { CATEGORY_POST_BY_ID_QUERY } from "~/models/wp_queries";
 import type { Post } from "~/graphql/__generated__/graphql";
 import { stripHtml, truncateText } from "~/utils/utilities";
+interface LoaderData {
+  post: Post;
+  categorySlug: string;
+}
 
 export const meta: MetaFunction = ({ data }) => {
-  const post = data as Post;
+  const { post } = data as LoaderData;
   // Without this condition, errors in the loader function will cause an unhandled
   // error in the meta function.
   if (!post || !post?.title) {
@@ -49,12 +54,13 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  console.log("in the new loader");
+  invariant(params.categorySlug, "params.categorySlug is required");
   invariant(params.postId, "params.postId is required");
-  const postId = params?.postId;
+  const categorySlug = params.categorySlug;
+  const postId = params.postId;
   const client = createApolloClient();
   const response = await client.query({
-    query: POST_BY_ID_QUERY,
+    query: CATEGORY_POST_BY_ID_QUERY,
     variables: {
       id: postId,
     },
@@ -73,11 +79,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     });
   }
 
-  return post;
+  return json({ post: post, categorySlug: categorySlug });
 };
 
 export default function BlogPost() {
-  const post = useLoaderData<typeof loader>();
+  const { post, categorySlug } = useLoaderData<typeof loader>();
   const caption = post?.featuredImage?.node?.altText
     ? post.featuredImage.node.altText
     : "";
@@ -91,12 +97,12 @@ export default function BlogPost() {
         "0"
       )}`
     : "";
-  const previousTitle = post?.previousPost?.title;
-  const previousSlug = post?.previousPost?.slug;
-  const previousId = post?.previousPost?.databaseId;
-  const nextTitle = post?.nextPost?.title;
-  const nextSlug = post?.nextPost?.slug;
-  const nextId = post?.nextPost?.databaseId;
+  const previousTitle = post?.previousPostInCategory?.title;
+  const previousSlug = post?.previousPostInCategory?.slug;
+  const previousId = post?.previousPostInCategory?.databaseId;
+  const nextTitle = post?.nextPostInCategory?.title;
+  const nextSlug = post?.nextPostInCategory?.slug;
+  const nextId = post?.nextPostInCategory?.databaseId;
 
   return (
     <div className="mx-2 my-6 md:max-w-prose md:mx-auto">
@@ -142,7 +148,7 @@ export default function BlogPost() {
             </div>
             <Link
               prefetch="intent"
-              to={`/blog/${previousId}/${previousSlug}`}
+              to={`/blog/category/${categorySlug}/${previousId}/${previousSlug}`}
               className="text-lg font-bold text-sky-700 hover:underline"
             >
               {previousTitle}
@@ -157,7 +163,7 @@ export default function BlogPost() {
             </div>
             <Link
               prefetch="intent"
-              to={`/blog/${nextId}/${nextSlug}`}
+              to={`/blog/category/${categorySlug}/${nextId}/${nextSlug}`}
               className="text-lg font-bold text-sky-700 hover:underline"
             >
               {nextTitle}

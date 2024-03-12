@@ -189,6 +189,43 @@ query GetPostById ($id: ID!) {
 }
 `);
 
+export const CATEGORY_POST_BY_ID_QUERY = gql(`
+query GetCategoryPostById ($id: ID!) {
+  post(id: $id, idType: DATABASE_ID) {
+    title
+    content
+    excerpt
+    slug
+    databaseId
+    date
+    author {
+      node {
+        name
+      }
+    }
+    featuredImage {
+      node {
+        altText
+        description
+        caption
+        id
+        sourceUrl
+      }
+    }
+    previousPostInCategory {
+      title
+      slug
+      databaseId
+    }
+    nextPostInCategory {
+      title
+      slug
+      databaseId
+    }
+  }
+}
+`);
+
 export const INDEX_PAGE_POSTS_QUERY = gql(`
 query getHomepagePosts {
     tags (where: {name: "featured"}) {
