@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { Maybe } from "graphql/jsutils/Maybe";
+import { stripHtml, truncateText } from "~/utils/utilities";
 
 interface PostExcerptCardProps {
   date: Maybe<string | null>;
@@ -8,6 +9,8 @@ interface PostExcerptCardProps {
   excerpt: Maybe<string | null>;
   authorName: Maybe<string | null>;
   slug: Maybe<string | null>;
+  excerptLength: number;
+  includeMetaData: boolean;
   basePath: string;
   databaseId: number;
 }
@@ -19,6 +22,8 @@ export default function PostExcerptCard({
   excerpt,
   authorName,
   slug,
+  excerptLength,
+  includeMetaData,
   basePath,
   databaseId,
 }: PostExcerptCardProps) {
@@ -26,6 +31,9 @@ export default function PostExcerptCard({
     ? `${new Date(date).getFullYear()}-${String(
         new Date(date).getMonth() + 1
       ).padStart(2, "0")}-${String(new Date(date).getDate()).padStart(2, "0")}`
+    : null;
+  const postExcerpt = excerpt
+    ? truncateText(stripHtml(excerpt), excerptLength)
     : null;
 
   return (
@@ -37,14 +45,13 @@ export default function PostExcerptCard({
         </h3>
       </Link>
       {excerpt ? (
-        <div
-          className="italic text-slate-800 text-base wp-excerpt"
-          dangerouslySetInnerHTML={{ __html: excerpt }}
-        />
+        <p className="italic text-slate-800 text-base wp-excerpt">
+          {postExcerpt}
+        </p>
       ) : (
         ""
       )}
-      {authorName && formattedDate ? (
+      {includeMetaData && authorName && formattedDate ? (
         <div className="text-slate-800 text-base mt-1">
           {authorName} <br />
           {formattedDate}

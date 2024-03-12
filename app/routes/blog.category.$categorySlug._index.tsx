@@ -98,6 +98,8 @@ export default function CategorySlug() {
               excerpt={edge.node?.excerpt}
               authorName={edge.node?.author?.node?.name}
               slug={edge.node?.slug}
+              excerptLength={160}
+              includeMetaData={true}
               basePath={
                 categorySlug ? `/blog/category/${categorySlug}` : `/blog`
               }
