@@ -7,12 +7,17 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteError,
+  useMatches,
 } from "@remix-run/react";
 import type { PropsWithChildren } from "react";
 
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
 import styles from "./tailwind.css";
+
+interface Handle {
+  breadcrumb?: (match: any) => JSX.Element;
+}
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
@@ -35,10 +40,19 @@ function Document({ children }: PropsWithChildren) {
 }
 
 export default function App() {
+  const matches = useMatches();
+
   return (
     <Document>
       <Header />
       <div className="flex-1">
+        {matches
+          .filter(
+            (match) => match.handle && (match?.handle as Handle)?.breadcrumb
+          )
+          .map((match, index) => (
+            <li key={index}>{(match.handle as Handle).breadcrumb!(match)}</li>
+          ))}
         <Outlet />
       </div>
       <ScrollRestoration />

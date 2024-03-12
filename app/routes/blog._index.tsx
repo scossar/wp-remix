@@ -10,6 +10,10 @@ import type {
 import { INDEX_PAGE_POSTS_QUERY } from "~/models/wp_queries";
 import PostExcerptCard from "~/components/PostExcerptCard";
 
+export const handle = {
+  breadcrumb: () => <Link to="/blog">Blog</Link>,
+};
+
 export const meta: MetaFunction = () => {
   return [
     { title: "Zalgorithm" },
