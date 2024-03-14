@@ -40,7 +40,10 @@ export default function PostExcerptCard({
         </h3>
       </Link>
       {excerpt ? (
-        <p className="italic text-slate-800 text-base wp-excerpt">{excerpt}</p>
+        <div
+          className="italic text-slate-800 text-base wp-excerpt"
+          dangerouslySetInnerHTML={{ __html: excerpt }}
+        />
       ) : (
         ""
       )}
