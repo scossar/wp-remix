@@ -8,7 +8,6 @@ import type {
   TagToPostConnectionEdge,
 } from "~/graphql/__generated__/graphql";
 import { INDEX_PAGE_POSTS_QUERY } from "~/models/wp_queries";
-import BlogHeader from "~/components/BlogHeader";
 import PostExcerptCard from "~/components/PostExcerptCard";
 
 export const meta: MetaFunction = () => {
@@ -49,7 +48,6 @@ export default function BlogIndex() {
 
   return (
     <div>
-      <BlogHeader />
       <div className="px-6 pb-6 mx-auto max-w-screen-lg">
         <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold text-center">
           Simon's Blog

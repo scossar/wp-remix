@@ -7,8 +7,6 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteError,
-  useMatches,
-  Params,
 } from "@remix-run/react";
 import type { PropsWithChildren } from "react";
 
