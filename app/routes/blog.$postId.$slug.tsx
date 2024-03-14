@@ -136,30 +136,39 @@ export default function BlogPost() {
       <div className="my-3 grid grid-cols-1 min-[431px]:grid-cols-2 gap-4 items-center h-full">
         {previousTitle && previousSlug && previousId ? (
           <div>
-            <div>
-              <span className="text-5xl">&larr;</span>
-              <span>Previous</span>
-            </div>
             <Link
               prefetch="intent"
               to={`/blog/${previousId}/${previousSlug}`}
               className="text-lg font-bold text-sky-700 hover:underline"
             >
+              <div className="flex items-center">
+                {" "}
+                <Icon
+                  key="arrow-left"
+                  id="arrow-left"
+                  className="text-slate-700 w-10 h-10 self-center"
+                />{" "}
+                <div>Previous </div>
+              </div>
               {previousTitle}
             </Link>
           </div>
         ) : null}
         {nextTitle && nextSlug && nextId ? (
           <div className="min-[431px]:text-right">
-            <div>
-              <span>Next</span>
-              <span className="text-5xl">&rarr;</span>
-            </div>
             <Link
               prefetch="intent"
               to={`/blog/${nextId}/${nextSlug}`}
               className="text-lg font-bold text-sky-700 hover:underline"
             >
+              <div className="flex items-center min-[431px]:justify-end">
+                Next
+                <Icon
+                  key="arrow-right"
+                  id="arrow-right"
+                  className="text-slate-700 inline w-10 h-10 self-center"
+                />{" "}
+              </div>
               {nextTitle}
             </Link>
           </div>
