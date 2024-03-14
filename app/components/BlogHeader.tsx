@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation } from "@remix-run/react";
 import { useEffect } from "react";
 import { Maybe } from "graphql/jsutils/Maybe";
 import { type RootQueryToCategoryConnection } from "~/graphql/__generated__/graphql";
+import { Icon } from "~/components/Icon";
 
 interface BlogHeaderProps {
   categories: Maybe<RootQueryToCategoryConnection>;
@@ -23,13 +24,17 @@ export default function BlogHeader({ categories }: BlogHeaderProps) {
         </h1>
         <div>
           <details
-            className="cursor-pointer absolute top-1/3 right-4 z-10"
+            className="cursor-pointer absolute top-1/4 right-0 z-10"
             id="blog-nav"
           >
-            <summary className="_no-triangle block absolute right-4 list-none">
-              Menu
+            <summary className="_no-triangle block absolute right-2 list-none">
+              <Icon
+                key="hamburger"
+                id="hamburger"
+                className="w-14 h-14 text-slate-50 hover:text-sky-200"
+              />
             </summary>
-            <ul className="bg-slate-50 text-slate-800 text-lg p-2 rounded relative top-8 shadow-md">
+            <ul className="bg-slate-50 text-slate-800 text-lg p-2 rounded relative top-8 right-3 shadow-md">
               {categories?.nodes
                 ? categories.nodes.map((category, index) => (
                     <li key={index}>

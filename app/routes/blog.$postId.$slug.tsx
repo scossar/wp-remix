@@ -6,6 +6,7 @@ import { createApolloClient } from "lib/createApolloClient";
 import { POST_BY_ID_QUERY } from "~/models/wp_queries";
 import type { Post } from "~/graphql/__generated__/graphql";
 import { stripHtml, truncateText } from "~/utils/utilities";
+import { Icon } from "~/components/Icon";
 
 export const meta: MetaFunction = ({ data }) => {
   const post = data as Post;
