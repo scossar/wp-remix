@@ -12,22 +12,10 @@ import {
 } from "@remix-run/react";
 import type { PropsWithChildren } from "react";
 
-import Header from "~/components/Header";
 import Footer from "~/components/Footer";
 import styles from "./tailwind.css";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
-
-interface Handle {
-  breadcrumb?: (match: any) => JSX.Element;
-}
-
-interface Match {
-  handle?: Handle;
-  pathname: string;
-  data: any; // probably not correct.
-  params: any; // probably not correct.
-}
 
 function Document({ children }: PropsWithChildren) {
   return (
@@ -48,23 +36,9 @@ function Document({ children }: PropsWithChildren) {
 }
 
 export default function App() {
-  const matches = useMatches() as Match[];
-
   return (
     <Document>
-      <Header />
       <div className="flex-1">
-        <ol>
-          {matches
-            .filter((match) => match.handle && match.handle.breadcrumb)
-            .map((match, index) => (
-              <li key={index}>
-                {match?.handle?.breadcrumb
-                  ? match.handle.breadcrumb(match)
-                  : ""}
-              </li>
-            ))}
-        </ol>
         <Outlet />
       </div>
       <ScrollRestoration />

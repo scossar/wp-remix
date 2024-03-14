@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useRouteError } from "@remix-run/react";
+import { Link, useRouteError } from "@remix-run/react";
+import SiteHeader from "~/components/SiteHeader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,9 +11,39 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="max-w-md mx-auto my-2">
-      <h2 className="text-3xl my-1">Hello Zalgorithm!</h2>
-      <p className="my-1">This is a test. This is only a test...</p>
+    <div>
+      <SiteHeader />
+      <div className="sm:max-w-prose mx-auto my-2">
+        <h2 className="text-3xl my-1">Hello</h2>
+        <p className="my-2">
+          Welcome to the Zalgorithm test site! I'm using it to learn about
+          headless WordPress, GraphQL, Remix, React, Typescript, Tailwind CSS...
+        </p>
+        <p className="my-2">
+          Most of the work is happening in the site's{" "}
+          <Link to="/blog" className="text-sky-700 hover:underline">
+            blog
+          </Link>
+          . I'm converting my WordPress site (
+          <Link
+            to="https://zalgorithm.com"
+            className="text-sky-700 hover:underline"
+          >
+            https://zalgorithm.com
+          </Link>
+          ) into a headless WordPress site and blogging about it as I go.
+        </p>
+        <p className="my-2">
+          Posts in the blog's{" "}
+          <Link
+            to="/blog/category/web-development"
+            className="text-sky-700 hover:underline"
+          >
+            Web Development Category
+          </Link>
+          , should not taken as tutorials. I have no idea what I'm doing (yet).
+        </p>
+      </div>
     </div>
   );
 }
