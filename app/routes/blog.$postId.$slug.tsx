@@ -148,7 +148,7 @@ export default function BlogPost() {
                   id="arrow-left"
                   className="text-slate-700 w-10 h-10 self-center"
                 />{" "}
-                <div>Previous </div>
+                <div className="text-slate-700">Previous </div>
               </div>
               {previousTitle}
             </Link>
@@ -162,7 +162,7 @@ export default function BlogPost() {
               className="text-lg font-bold text-sky-700 hover:underline"
             >
               <div className="flex items-center min-[431px]:justify-end">
-                Next
+                <div className="text-slate-700">Next</div>
                 <Icon
                   key="arrow-right"
                   id="arrow-right"
