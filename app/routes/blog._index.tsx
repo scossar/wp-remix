@@ -62,7 +62,6 @@ export default function BlogIndex() {
               excerpt={postEdge.node?.excerpt}
               authorName={postEdge.node.author?.node?.name}
               slug={postEdge.node?.slug}
-              excerptLength={160}
               includeMetaData={true}
               basePath={basePath}
               databaseId={postEdge.node.databaseId}
@@ -102,7 +101,6 @@ export default function BlogIndex() {
                       excerpt={postEdge.node?.excerpt}
                       authorName={postEdge.node.author?.node?.name}
                       slug={postEdge.node?.slug}
-                      excerptLength={160}
                       includeMetaData={true}
                       basePath={basePath}
                       databaseId={postEdge.node.databaseId}
