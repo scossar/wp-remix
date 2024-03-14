@@ -13,7 +13,7 @@ export default function Paginator({ pageInfo }: PaginatorProps) {
     <div className="w-full flex justify-between">
       <div className="flex">
         {hasPreviousPage && startCursor ? (
-          <Link to={`?startCursor=${startCursor}`}>
+          <Link to={`?startCursor=${startCursor}`} className="hover:underline">
             <Icon
               key="arrow-left"
               id="arrow-left"
@@ -27,7 +27,7 @@ export default function Paginator({ pageInfo }: PaginatorProps) {
       </div>
       <div className="flex">
         {hasNextPage && endCursor ? (
-          <Link to={`?endCursor=${endCursor}`}>
+          <Link to={`?endCursor=${endCursor}`} className="hover:underline">
             <Icon
               key="arrow-right"
               id="arrow-right"

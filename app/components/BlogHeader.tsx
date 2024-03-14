@@ -31,10 +31,20 @@ export default function BlogHeader({ categories }: BlogHeaderProps) {
               <Icon
                 key="hamburger"
                 id="hamburger"
-                className="w-14 h-14 text-slate-50 hover:text-sky-200"
+                className="w-14 h-14 text-slate-50 hover:text-slate-200"
               />
             </summary>
-            <ul className="bg-slate-50 text-slate-800 text-lg p-2 rounded relative top-8 right-3 shadow-md">
+            <ul className="bg-slate-50 text-slate-800 text-base p-3 rounded relative top-8 right-3 shadow-lg">
+              <li key="posts">
+                <NavLink
+                  to="/blog/posts"
+                  className={({ isActive, isPending }) =>
+                    isPending ? "pending" : isActive ? "text-sky-700" : ""
+                  }
+                >
+                  all posts
+                </NavLink>
+              </li>
               {categories?.nodes
                 ? categories.nodes.map((category, index) => (
                     <li key={index}>
