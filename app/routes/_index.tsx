@@ -13,7 +13,7 @@ export default function Index() {
   return (
     <div>
       <SiteHeader />
-      <div className="sm:max-w-prose mx-auto my-2">
+      <div className="sm:max-w-prose mx-auto my-2 px-3">
         <h2 className="text-3xl my-1">Hello</h2>
         <p className="my-2">
           Welcome to the Zalgorithm test site! I'm using it to learn about

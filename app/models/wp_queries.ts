@@ -1,5 +1,16 @@
 import { gql } from "@apollo/client/core/index.js";
 
+export const CATEGORIES_DETAILS_QUERY = gql(`
+query GetCategoriesDetails {
+  categories {
+    nodes {
+      name
+      slug
+    }
+  }
+}
+`);
+
 export const POSTS_QUERY = gql(`
 query GetPosts {
     posts {

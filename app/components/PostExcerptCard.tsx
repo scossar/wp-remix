@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import { Maybe } from "graphql/jsutils/Maybe";
 import { stripHtml, truncateText } from "~/utils/utilities";
 
+// todo: I don't think I need to use `null` with the Maybe generic type
 interface PostExcerptCardProps {
   date: Maybe<string | null>;
   featuredImage: Maybe<string | null>;
