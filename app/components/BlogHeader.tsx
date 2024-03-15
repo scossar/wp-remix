@@ -18,20 +18,21 @@ export default function BlogHeader({ categories }: BlogHeaderProps) {
   }, [location]);
   return (
     <header className="bg-sky-800 text-slate-50 text-xl px-3 py-4 top-0 sticky overflow-visible">
-      <div className="flex justify-between items-center w-full max-w-screen-xl mx-auto">
+      <div className="flex justify-between items-center w-full max-w-screen-xl mx-auto relative">
         <h1>
           <Link to="/">Zalgorithm</Link>
         </h1>
         <div>
           <details
-            className="cursor-pointer absolute top-1/4 right-0 z-10"
+            className="cursor-pointer absolute top-0 right-0 z-10"
             id="blog-nav"
           >
-            <summary className="_no-triangle block absolute right-2 list-none">
+            <summary className="_no-triangle block absolute right-0 top-0 list-none">
               <Icon
                 key="hamburger"
                 id="hamburger"
-                className="w-14 h-14 text-slate-50 hover:text-slate-200"
+                y={-10}
+                className="text-slate-50 hover:text-slate-200 w-12 h-12  right-0"
               />
             </summary>
             <ul className="bg-slate-50 text-slate-800 text-base p-3 rounded relative top-8 right-3 shadow-lg">
