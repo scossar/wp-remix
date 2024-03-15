@@ -15,7 +15,7 @@ export default function Paginator({ pageInfo }: PaginatorProps) {
         {hasPreviousPage && startCursor ? (
           <Link
             to={`?startCursor=${startCursor}`}
-            className="hover:underline flex flex-col items-start"
+            className="hover:underline flex flex-col items-start text-lg font-bold text-sky-700"
           >
             <Icon
               key="arrow-left"
@@ -33,7 +33,7 @@ export default function Paginator({ pageInfo }: PaginatorProps) {
         {hasNextPage && endCursor ? (
           <Link
             to={`?endCursor=${endCursor}`}
-            className="hover:underline flex flex-col items-end"
+            className="hover:underline flex flex-col items-end text-lg font-bold text-sky-700"
           >
             <Icon
               key="arrow-right"

@@ -141,7 +141,7 @@ export default function BlogPost() {
         className="text-slate-800 wp-post"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
-      <div className="my-3 grid grid-cols-1 min-[431px]:grid-cols-2 gap-4 items-center h-full">
+      <div className="my-3 flex justify-between  flex-col min-[431px]:flex-row">
         {previousTitle && previousSlug && previousId ? (
           <div>
             <Link
@@ -154,6 +154,7 @@ export default function BlogPost() {
                 <Icon
                   key="arrow-left"
                   id="arrow-left"
+                  x={-5}
                   className="text-slate-700 w-10 h-10 self-center"
                 />{" "}
                 <div className="text-slate-700">Previous </div>
@@ -166,7 +167,7 @@ export default function BlogPost() {
           <div className="min-[431px]:text-right">
             <Link
               prefetch="intent"
-              to={`/blog/category/${categorySlug}/${nextId}/${nextSlug}`}
+              to={`/blog/${nextId}/${nextSlug}`}
               className="text-lg font-bold text-sky-700 hover:underline"
             >
               <div className="flex items-center min-[431px]:justify-end">
@@ -174,7 +175,8 @@ export default function BlogPost() {
                 <Icon
                   key="arrow-right"
                   id="arrow-right"
-                  className="text-slate-700 inline w-10 h-10 self-center"
+                  x={5}
+                  className="text-slate-700 inline w-10 h-10"
                 />{" "}
               </div>
               {nextTitle}

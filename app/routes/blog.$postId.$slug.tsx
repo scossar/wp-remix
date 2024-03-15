@@ -133,7 +133,7 @@ export default function BlogPost() {
         className="text-slate-800 wp-post"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
-      <div className="my-3 grid grid-cols-1 min-[431px]:grid-cols-2 gap-4 items-center h-full">
+      <div className="my-3 flex justify-between flex-col min-[431px]:flex-row">
         {previousTitle && previousSlug && previousId ? (
           <div>
             <Link
@@ -168,7 +168,7 @@ export default function BlogPost() {
                   key="arrow-right"
                   id="arrow-right"
                   x={5}
-                  className="text-slate-700 inline w-10 h-10 self-center"
+                  className="text-slate-700 inline w-10 h-10"
                 />{" "}
               </div>
               {nextTitle}
