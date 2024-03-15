@@ -157,7 +157,7 @@ export default function BlogPost() {
                   x={-5}
                   className="text-slate-700 w-10 h-10 self-center"
                 />{" "}
-                <div className="text-slate-700">Previous </div>
+                <div className="text-slate-700">Older</div>
               </div>
               {previousTitle}
             </Link>
@@ -171,7 +171,7 @@ export default function BlogPost() {
               className="text-lg font-bold text-sky-700 hover:underline"
             >
               <div className="flex items-center min-[431px]:justify-end">
-                <div className="text-slate-700">Next</div>
+                <div className="text-slate-700">Newer</div>
                 <Icon
                   key="arrow-right"
                   id="arrow-right"
