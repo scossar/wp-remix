@@ -16,7 +16,7 @@ export default function Index() {
       <div className="sm:max-w-prose mx-auto my-2 px-3">
         <h2 className="text-3xl my-1">Hello</h2>
         <p className="my-2">
-          This started as a lark. The site's under construction...
+          This started as a lark. The site is under construction...
         </p>
       </div>
     </div>
