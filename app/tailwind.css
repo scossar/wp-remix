@@ -35,6 +35,10 @@
   .wp-post ol {
     @apply list-decimal;
   }
+  .wp-post ul li,
+  .wp-post ol li {
+    @apply py-2;
+  }
   .wp-post h2 {
     @apply text-slate-900 text-3xl font-serif mt-3;
   }
