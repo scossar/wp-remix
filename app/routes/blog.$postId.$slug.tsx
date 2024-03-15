@@ -146,6 +146,7 @@ export default function BlogPost() {
                 <Icon
                   key="arrow-left"
                   id="arrow-left"
+                  x={-5}
                   className="text-slate-700 w-10 h-10 self-center"
                 />{" "}
                 <div className="text-slate-700">Previous </div>
@@ -166,6 +167,7 @@ export default function BlogPost() {
                 <Icon
                   key="arrow-right"
                   id="arrow-right"
+                  x={5}
                   className="text-slate-700 inline w-10 h-10 self-center"
                 />{" "}
               </div>
