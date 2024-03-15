@@ -17,7 +17,7 @@ export default function BlogHeader({ categories }: BlogHeaderProps) {
     }
   }, [location]);
   return (
-    <header className="bg-sky-800 text-slate-50 text-xl px-3 py-4 top-0 sticky overflow-visible">
+    <header className="bg-sky-800 text-slate-50 text-2xl px-3 py-4 top-0 sticky overflow-visible">
       <div className="flex justify-between items-center w-full max-w-screen-xl mx-auto relative">
         <h1>
           <Link to="/">Zalgorithm</Link>
@@ -31,11 +31,10 @@ export default function BlogHeader({ categories }: BlogHeaderProps) {
               <Icon
                 key="hamburger"
                 id="hamburger"
-                y={-10}
-                className="text-slate-50 hover:text-slate-200 w-12 h-12  right-0"
+                className="text-slate-50 rounded hover:bg-sky-700 hover:outline hover:outline-sky-700 hover:outline-4 hover:outline-solid w-8 h-8"
               />
             </summary>
-            <ul className="bg-slate-50 text-slate-800 text-base p-3 rounded relative top-8 right-3 shadow-lg">
+            <ul className="bg-slate-50 text-slate-800 text-base p-3 rounded relative top-9 right-3 shadow-lg">
               <li key="posts">
                 <NavLink
                   to="/blog/posts"
