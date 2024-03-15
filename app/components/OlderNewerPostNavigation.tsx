@@ -16,11 +16,11 @@ export default function OlderNewerPostNavigation({
 }: PostNavigationProps) {
   return (
     <div className="my-3 flex justify-between  flex-col min-[431px]:flex-row">
-      {previousTitle && previousSlug && previousId ? (
+      {previousPost?.title && previousPost?.slug && previousPost?.databaseId ? (
         <div>
           <Link
             prefetch="intent"
-            to={`${basePath}/${previousId}/${previousSlug}`}
+            to={`${basePath}/${previousPost.databaseId}/${previousPost.slug}`}
             className="text-lg font-bold text-sky-700 hover:underline"
           >
             <div className="flex items-center">
@@ -33,15 +33,15 @@ export default function OlderNewerPostNavigation({
               />{" "}
               <div className="text-slate-700">Older</div>
             </div>
-            {previousTitle}
+            {previousPost.title}
           </Link>
         </div>
       ) : null}
-      {nextTitle && nextSlug && nextId ? (
+      {nextPost?.title && nextPost?.slug && nextPost?.databaseId ? (
         <div className="min-[431px]:text-right">
           <Link
             prefetch="intent"
-            to={`${basePath}/${nextId}/${nextSlug}`}
+            to={`${basePath}/${nextPost.databaseId}/${nextPost.slug}`}
             className="text-lg font-bold text-sky-700 hover:underline"
           >
             <div className="flex items-center min-[431px]:justify-end">
@@ -53,7 +53,7 @@ export default function OlderNewerPostNavigation({
                 className="text-slate-700 inline w-10 h-10"
               />{" "}
             </div>
-            {nextTitle}
+            {nextPost.title}
           </Link>
         </div>
       ) : null}
