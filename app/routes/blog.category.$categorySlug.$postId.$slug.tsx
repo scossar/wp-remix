@@ -167,7 +167,7 @@ export default function BlogPost() {
           <div className="min-[431px]:text-right">
             <Link
               prefetch="intent"
-              to={`/blog/${nextId}/${nextSlug}`}
+              to={`/blog/category/${categorySlug}/${nextId}/${nextSlug}`}
               className="text-lg font-bold text-sky-700 hover:underline"
             >
               <div className="flex items-center min-[431px]:justify-end">
