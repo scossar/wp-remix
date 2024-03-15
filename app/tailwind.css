@@ -51,7 +51,7 @@
     @apply my-6;
   }
   .wp-post .wp-block-quote {
-    @apply border-l border-slate-400 pl-6 my-6 font-medium;
+    @apply border-l border-slate-400 pl-6 my-9 font-medium;
   }
   .wp-post .wp-block-quote cite {
     @apply font-normal text-sm italic;
