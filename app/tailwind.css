@@ -11,7 +11,7 @@
     @apply hidden;
   }
   .wp-post p {
-    @apply my-2;
+    @apply my-3;
   }
   .wp-excerpt a,
   .wp-post a {
@@ -30,7 +30,7 @@
     @apply max-w-full;
   }
   .wp-post ul {
-    @apply list-disc;
+    @apply list-disc ml-5;
   }
   .wp-post ol {
     @apply list-decimal;
@@ -42,7 +42,7 @@
     @apply text-slate-900 text-2xl font-serif mt-3;
   }
   .wp-post img {
-    @apply rounded-md shadow-xl max-w-full;
+    @apply rounded-md shadow-xl max-w-full my-6;
   }
   .wp-post .wp-block-audio {
     @apply flex justify-center items-center h-full;
@@ -51,7 +51,7 @@
     @apply my-6;
   }
   .wp-post .wp-block-quote {
-    @apply border-l border-slate-600 pl-12 font-medium;
+    @apply border-l border-slate-400 pl-6 my-6 font-medium;
   }
   .wp-post .wp-block-quote cite {
     @apply font-normal text-sm italic;
