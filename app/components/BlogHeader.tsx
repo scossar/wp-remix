@@ -12,12 +12,30 @@ export default function BlogHeader({ categories }: BlogHeaderProps) {
   const location = useLocation();
   const containerHeightClass: string = "h-14";
   const hamburgerWidthClass: string = "w-14";
+
   useEffect(() => {
     const detailsElement = document.getElementById("blog-nav");
     if (detailsElement) {
       detailsElement.removeAttribute("open");
     }
   }, [location]);
+
+  useEffect(() => {
+    const detailsElement = document.getElementById("blog-nav");
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (detailsElement && !detailsElement.contains(target)) {
+        detailsElement.removeAttribute("open");
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <header className="bg-sky-800 text-slate-50 px-3 py-2 top-0 sticky overflow-visible">
       <div
@@ -40,29 +58,39 @@ export default function BlogHeader({ categories }: BlogHeaderProps) {
                 className={`text-slate-50 rounded hover:bg-sky-700 hover:outline hover:outline-sky-700 hover:outline-4 hover:outline-solid ${hamburgerWidthClass} ${containerHeightClass}`}
               />
             </summary>
-            <ul className="bg-slate-50 text-slate-800 text-lg p-3 rounded relative top-12 right-3 shadow-lg w-56 divide-y divide-slate-300">
-              <li key="posts" className="py-1">
-                <NavLink
-                  to="/blog/posts"
-                  className={({ isActive, isPending }) =>
-                    `${isPending ? "pending" : isActive ? "text-sky-700" : ""}`
-                  }
-                >
-                  all posts
-                </NavLink>
-              </li>
+            <ul className="bg-slate-50 text-slate-800 text-lg p-3 rounded relative top-12 right-3 shadow-lg w-56 divide-slate-300 divide-y">
+              <NavLink
+                key="posts"
+                to="/blog/posts"
+                className={({ isActive, isPending }) =>
+                  `py-1 pl-1 block hover:bg-slate-200 ${
+                    isPending
+                      ? "pending"
+                      : isActive
+                      ? "text-sky-700 font-medium bg-slate-200"
+                      : ""
+                  }`
+                }
+              >
+                <li>all posts</li>
+              </NavLink>
               {categories?.nodes
                 ? categories.nodes.map((category, index) => (
-                    <li key={index} className="py-1">
-                      <NavLink
-                        to={`/blog/category/${category.slug}`}
-                        className={({ isActive, isPending }) =>
-                          isPending ? "pending" : isActive ? "text-sky-700" : ""
-                        }
-                      >
-                        {category.name}
-                      </NavLink>
-                    </li>
+                    <NavLink
+                      key={index}
+                      to={`/blog/category/${category.slug}`}
+                      className={({ isActive, isPending }) =>
+                        `py-1 pl-1 block hover:bg-slate-200 ${
+                          isPending
+                            ? "pending"
+                            : isActive
+                            ? "text-sky-700 font-medium bg-slate-200"
+                            : ""
+                        }`
+                      }
+                    >
+                      <li>{category.name}</li>
+                    </NavLink>
                   ))
                 : ""}
             </ul>
