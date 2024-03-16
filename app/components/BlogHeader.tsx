@@ -42,7 +42,7 @@ export default function BlogHeader({ categories }: BlogHeaderProps) {
         className={`flex justify-between items-center w-full max-w-screen-xl mx-auto relative ${containerHeightClass}`}
       >
         <h1>
-          <Link to="/" className="text-3xl">
+          <Link to="/blog" className="text-3xl">
             Zalgorithm
           </Link>
         </h1>
