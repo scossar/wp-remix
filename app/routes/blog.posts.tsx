@@ -81,7 +81,6 @@ export default function Posts() {
               excerpt={edge.node?.excerpt}
               authorName={edge.node?.author?.node?.name}
               slug={edge.node?.slug}
-              excerptLength={160}
               includeMetaData={true}
               basePath={basePath}
               databaseId={edge.node.databaseId}
