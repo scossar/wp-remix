@@ -35,7 +35,6 @@ export default function BlogIndex() {
   const { categories } = useLoaderData<typeof loader>();
   return (
     <div>
-      <BlogHeader categories={categories} />
       <Outlet />
     </div>
   );
