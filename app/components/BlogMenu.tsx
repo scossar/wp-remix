@@ -1,13 +1,87 @@
-export default function BlogMenu() {
+import { NavLink, useLocation } from "@remix-run/react";
+import { useEffect } from "react";
+import { Maybe } from "graphql/jsutils/Maybe";
+import { type RootQueryToCategoryConnection } from "~/graphql/__generated__/graphql";
+import { Icon } from "~/components/Icon";
+
+interface BlogMenuProps {
+  categories: Maybe<RootQueryToCategoryConnection>;
+}
+
+export default function BlogMenu({ categories }: BlogMenuProps) {
+  const location = useLocation();
+  const containerHeightClass: string = "h-14";
+  const hamburgerWidthClass: string = "w-14";
+  useEffect(() => {
+    const detailsElement = document.getElementById("blog-nav");
+    if (detailsElement) {
+      detailsElement.removeAttribute("open");
+    }
+  }, [location]);
+
+  useEffect(() => {
+    const detailsElement = document.getElementById("blog-nav");
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (detailsElement && !detailsElement.contains(target)) {
+        detailsElement.removeAttribute("open");
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   return (
     <>
-      <details className="text-slate-50">
-        <summary>blog menu</summary>
-        <ul className="bg-slate-600">
-          <li>this</li>
-          <li>that</li>
-          <li>and</li>
-          <li>the other</li>
+      <details
+        className="cursor-pointer absolute top-0 right-0 z-10"
+        id="blog-nav"
+      >
+        <summary className="_no-triangle block absolute right-0 top-0 list-none">
+          <Icon
+            key="hamburger"
+            id="hamburger"
+            className={`text-slate-50 rounded hover:bg-sky-700 hover:outline hover:outline-sky-700 hover:outline-4 hover:outline-solid ${hamburgerWidthClass} ${containerHeightClass}`}
+          />
+        </summary>
+        <ul className="bg-slate-50 text-slate-800 text-lg p-3 rounded relative top-12 right-3 shadow-lg w-56 divide-slate-300 divide-y">
+          <NavLink
+            key="posts"
+            to="/blog/posts"
+            className={({ isActive, isPending }) =>
+              `py-1 pl-1 block hover:bg-slate-200 ${
+                isPending
+                  ? "pending"
+                  : isActive
+                  ? "text-sky-700 font-medium bg-slate-200"
+                  : ""
+              }`
+            }
+          >
+            <li>all posts</li>
+          </NavLink>
+          {categories?.nodes
+            ? categories.nodes.map((category, index) => (
+                <NavLink
+                  key={index}
+                  to={`/blog/category/${category.slug}`}
+                  className={({ isActive, isPending }) =>
+                    `py-1 pl-1 block hover:bg-slate-200 ${
+                      isPending
+                        ? "pending"
+                        : isActive
+                        ? "text-sky-700 font-medium bg-slate-200"
+                        : ""
+                    }`
+                  }
+                >
+                  <li>{category.name}</li>
+                </NavLink>
+              ))
+            : ""}
         </ul>
       </details>
     </>

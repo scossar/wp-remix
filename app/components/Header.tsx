@@ -1,7 +1,14 @@
 import { Link, useMatches } from "@remix-run/react";
 import BlogMenu from "~/components/BlogMenu";
 
-export default function BlogHeader() {
+import { type RootQueryToCategoryConnection } from "~/graphql/__generated__/graphql";
+import { Maybe } from "graphql/jsutils/Maybe";
+
+interface HeaderProps {
+  categories: Maybe<RootQueryToCategoryConnection>;
+}
+
+export default function Header({ categories }: HeaderProps) {
   const matches = useMatches();
   const path: string = matches.slice(-1)?.[0].pathname;
   const pathParts: string[] = path.split("/");
@@ -19,7 +26,7 @@ export default function BlogHeader() {
           </Link>
         </h1>
         <div className={`relative ${containerHeightClass}`}>
-          {blogPage ? <BlogMenu /> : ""}
+          {blogPage ? <BlogMenu categories={categories} /> : ""}
         </div>
       </div>
     </header>

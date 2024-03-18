@@ -6,15 +6,32 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
   useRouteError,
 } from "@remix-run/react";
 import type { PropsWithChildren } from "react";
+
+import { createApolloClient } from "lib/createApolloClient";
+import { CATEGORIES_DETAILS_QUERY } from "./models/wp_queries";
 
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
 import styles from "./tailwind.css";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+
+export const loader = async () => {
+  const client = createApolloClient();
+  const response = await client.query({
+    query: CATEGORIES_DETAILS_QUERY,
+  });
+
+  if (response.errors) {
+    // probably don't throw an error here
+  }
+
+  return response?.data?.categories;
+};
 
 function Document({ children }: PropsWithChildren) {
   return (
@@ -35,10 +52,11 @@ function Document({ children }: PropsWithChildren) {
 }
 
 export default function App() {
+  const categories = useLoaderData<typeof loader>();
   return (
     <Document>
       <div className="flex-1">
-        <Header />
+        <Header categories={categories} />
         <Outlet />
       </div>
       <ScrollRestoration />

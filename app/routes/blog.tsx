@@ -1,10 +1,5 @@
-import { type LoaderFunctionArgs } from "@remix-run/node";
-import { json, MetaFunction } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
-
-import { createApolloClient } from "lib/createApolloClient";
-import { CATEGORIES_DETAILS_QUERY } from "~/models/wp_queries";
-import BlogHeader from "~/components/BlogHeader";
+import { MetaFunction } from "@remix-run/node";
+import { Link, Outlet, useRouteError } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,26 +8,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-// I think I'll be using the `request` arg soon
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const client = createApolloClient();
-  const response = await client.query({
-    query: CATEGORIES_DETAILS_QUERY,
-  });
-
-  // For this case it makes sense to handle both errors here
-  // todo: apollo errors seem to be crashing the site. Figure out how to handle that.
-  if (response.errors || !response?.data?.categories) {
-    throw new Error("An error was returned loading the site's categories.");
-  }
-
-  const categories = response.data.categories;
-
-  return json({ categories: categories });
-};
-
 export default function BlogIndex() {
-  const { categories } = useLoaderData<typeof loader>();
   return (
     <div>
       <Outlet />
