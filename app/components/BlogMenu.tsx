@@ -33,11 +33,6 @@ export default function BlogMenu({ categories }: BlogMenuProps) {
           />
         </button>
       </div>
-
-      {/*<div
-        className="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800 right-0"
-        aria-labelledby="drawer-label"
-  >*/}
       <div
         className={`bg-purple-400 fixed left-0 top-16 h-screen p-4 overflow-y-auto ${
           isPanelOpen
