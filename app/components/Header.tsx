@@ -14,7 +14,7 @@ export default function Header({ categories }: HeaderProps) {
   const pathParts: string[] = path.split("/");
   const blogPage: boolean = pathParts.includes("blog");
 
-  const containerHeightClass: string = "h-14";
+  const containerHeightClass: string = "h-12";
   return (
     <header className="bg-sky-800 text-slate-50 px-3 py-2 top-0 sticky">
       <div
