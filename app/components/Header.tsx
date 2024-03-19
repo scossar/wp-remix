@@ -48,7 +48,11 @@ export default function Header({ categories }: HeaderProps) {
           </div>
         </div>
       </header>
-      <Sidebar isSidebarOpen={isSidebarOpen} categories={categories} />
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        categories={categories}
+        onClose={() => setIsSidebarOpen(false)}
+      />
     </>
   );
 }
