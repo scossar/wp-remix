@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@remix-run/react";
+import { Link, NavLink, useLocation } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { Icon } from "~/components/Icon";
 import Sidebar from "~/components/Sidebar";
@@ -35,7 +35,34 @@ export default function Header({ categories }: HeaderProps) {
               Zalgorithm
             </Link>
           </h1>
-          <div className={`relative ${containerHeightClass}`}>
+          <div className={`relative ${containerHeightClass} flex items-center`}>
+            <div className="pr-14 pt-3 hidden min-[390px]:flex min-[390px]:justify-between">
+              <NavLink
+                className={({ isActive, isPending }) =>
+                  `pr-2 ${isPending ? "pending" : isActive ? "underline" : ""}`
+                }
+                to="/stories"
+              >
+                stories
+              </NavLink>
+              <NavLink
+                className={({ isActive, isPending }) =>
+                  `pr-2 ${isPending ? "pending" : isActive ? "underline" : ""}`
+                }
+                to="/music"
+              >
+                music
+              </NavLink>
+              <NavLink
+                className={({ isActive, isPending }) =>
+                  `pr-2 ${isPending ? "pending" : isActive ? "underline" : ""}`
+                }
+                to="/blog"
+              >
+                blog
+              </NavLink>
+            </div>
+
             <div className="absolute top-0 right-0">
               <button key="hamburger" id="hamburger" onClick={toggleSidebar}>
                 <Icon

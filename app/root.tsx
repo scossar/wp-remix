@@ -13,9 +13,6 @@ import type { PropsWithChildren } from "react";
 import { createApolloClient } from "lib/createApolloClient";
 import { CATEGORIES_DETAILS_QUERY } from "./models/wp_queries";
 
-import Footer from "~/components/Footer";
-import Header from "~/components/Header";
-import Sidebar from "./components/Sidebar";
 import AppLayout from "./components/AppLayout";
 import styles from "./tailwind.css";
 
