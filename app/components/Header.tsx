@@ -1,5 +1,7 @@
-import { Link, useMatches } from "@remix-run/react";
-import BlogMenu from "~/components/BlogMenu";
+import { Link, useLocation } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { Icon } from "~/components/Icon";
+import Sidebar from "~/components/Sidebar";
 
 import { type RootQueryToCategoryConnection } from "~/graphql/__generated__/graphql";
 import { Maybe } from "graphql/jsutils/Maybe";
@@ -9,26 +11,44 @@ interface HeaderProps {
 }
 
 export default function Header({ categories }: HeaderProps) {
-  const matches = useMatches();
-  const path: string = matches.slice(-1)?.[0].pathname;
-  const pathParts: string[] = path.split("/");
-  const blogPage: boolean = pathParts.includes("blog");
+  const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location]);
+
+  const hamburgerWidthClass: string = "w-12";
   const containerHeightClass: string = "h-12";
+
   return (
-    <header className="bg-sky-800 text-slate-50 px-3 py-2 top-0 sticky">
-      <div
-        className={`flex justify-between items-center w-full max-w-screen-xl mx-auto relative ${containerHeightClass}`}
-      >
-        <h1>
-          <Link to="/" className="text-3xl">
-            Zalgorithm
-          </Link>
-        </h1>
-        <div className={`relative ${containerHeightClass}`}>
-          {blogPage ? <BlogMenu categories={categories} /> : ""}
+    <>
+      <header className="bg-sky-800 text-slate-50 px-3 py-2 top-0 sticky">
+        <div
+          className={`flex justify-between items-center w-full max-w-screen-xl mx-auto relative ${containerHeightClass}`}
+        >
+          <h1>
+            <Link to="/" className="text-3xl">
+              Zalgorithm
+            </Link>
+          </h1>
+          <div className={`relative ${containerHeightClass}`}>
+            <div className="absolute top-0 right-0">
+              <button key="hamburger" id="hamburger" onClick={toggleSidebar}>
+                <Icon
+                  key="hamburger"
+                  id="hamburger"
+                  className={`text-slate-50 rounded hover:bg-sky-700 hover:outline hover:outline-sky-700 hover:outline-4 hover:outline-solid ${hamburgerWidthClass} ${containerHeightClass}`}
+                />
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <Sidebar isSidebarOpen={isSidebarOpen} categories={categories} />
+    </>
   );
 }

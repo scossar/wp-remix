@@ -3,7 +3,6 @@ import {
   Links,
   LiveReload,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
@@ -16,6 +15,8 @@ import { CATEGORIES_DETAILS_QUERY } from "./models/wp_queries";
 
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
+import Sidebar from "./components/Sidebar";
+import AppLayout from "./components/AppLayout";
 import styles from "./tailwind.css";
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -55,14 +56,10 @@ export default function App() {
   const categories = useLoaderData<typeof loader>();
   return (
     <Document>
-      <div className="flex-1">
-        <Header categories={categories} />
-        <Outlet />
-      </div>
+      <AppLayout categories={categories} />
       <ScrollRestoration />
       <Scripts />
       <LiveReload />
-      <Footer />
     </Document>
   );
 }
