@@ -14,7 +14,9 @@ export default function AppLayout({ categories }: AppLayoutProps) {
     <>
       <div className="flex-1">
         <Header categories={categories} />
-        <Outlet />
+        <div className="p-3">
+          <Outlet />
+        </div>
       </div>
       <Footer />
     </>

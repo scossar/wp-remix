@@ -40,7 +40,7 @@ export default function Sidebar({
 
   return (
     <div
-      className={`fixed left-0 top-16 right-20 sm:right-1/2 h-screen pb-36 bg-slate-100 z-10 shadow-lg rounded  overflow-y-auto ${
+      className={`fixed left-0 top-16 right-20 sm:right-1/2 h-screen pb-36 bg-sky-100 z-10 shadow-lg rounded  overflow-y-auto ${
         isSidebarOpen
           ? "transition-transform -translate-x-0"
           : "transition-transform -translate-x-full"
@@ -56,8 +56,8 @@ export default function Sidebar({
         <div>
           <Link
             to="/"
-            className={`block hover:bg-slate-300 pt-10 pb-3 px-3 ${
-              isRoot && "text-sky-700 font-medium"
+            className={`block hover:bg-sky-200 pt-10 pb-3 px-3 ${
+              isRoot && "bg-sky-200"
             }`}
           >
             <h2 className="text-2xl">Zalgorithm (home page)</h2>
@@ -65,21 +65,19 @@ export default function Sidebar({
           <ul>
             <NavLink
               to="/blog"
-              className={` block hover:bg-slate-300 p-3 ${
-                isBlog && "text-sky-700"
+              className={` block hover:bg-sky-200 p-3 ${
+                isBlog && "bg-sky-200"
               }`}
             >
               <li>
                 <span className="text-2xl">Blog</span>
-                <p>
-                  Blogging about creating a blog. Kind of meta at the moment.
-                </p>
+                <p>Blogging about creating a blog. Kind of meta.</p>
               </li>
             </NavLink>
             <NavLink
               to="/music"
-              className={`block hover:bg-slate-300 p-3 ${
-                isMusic && "text-sky-700"
+              className={`block hover:bg-sky-200 p-3 ${
+                isMusic && "bg-sky-200"
               }`}
             >
               <li>
@@ -92,27 +90,24 @@ export default function Sidebar({
             </NavLink>
             <NavLink
               to="/stories"
-              className={`block hover:bg-slate-300 p-3 ${
-                isStories && "text-sky-700"
+              className={`block hover:bg-sky-200 p-3 ${
+                isStories && "bg-sky-200"
               }`}
             >
               <li>
                 <span className="text-2xl">Stories</span>
-                <p>Everybody's got a one...</p>
+                <p>Only fools rush in...</p>
               </li>
             </NavLink>
             <NavLink
               to="/hire-me"
-              className={`block hover:bg-slate-300 p-3 ${
-                isHireMe && "text-sky-700"
+              className={`block hover:bg-sky-200 p-3 ${
+                isHireMe && "bg-sky-200"
               }`}
             >
               <li>
                 <span className="text-2xl">Hire Me</span>
-                <p>
-                  But not yet. A contact form coming soon. There will be details
-                  about it in the blog.
-                </p>
+                <p>But not yet...</p>
               </li>
             </NavLink>
           </ul>
@@ -129,12 +124,8 @@ export default function Sidebar({
                 key={index}
                 to={`/blog/category/${category.slug}`}
                 className={({ isActive, isPending }) =>
-                  `p-3 block hover:bg-slate-200 ${
-                    isPending
-                      ? "pending"
-                      : isActive
-                      ? "text-sky-700 font-medium bg-slate-200"
-                      : ""
+                  `p-3 block hover:bg-sky-200 ${
+                    isPending ? "pending" : isActive ? "bg-sky-200" : ""
                   }`
                 }
               >
@@ -143,8 +134,21 @@ export default function Sidebar({
                 </li>
               </NavLink>
             ))}
+            <NavLink
+              to="/blog/posts"
+              className={({ isActive, isPending }) =>
+                `p-3 block hover:bg-sky-200 ${
+                  isPending ? "pending" : isActive ? "bg-sky-200" : ""
+                }`
+              }
+            >
+              <li>
+                <span className="text-2xl">Post Archive</span>
+                <p>A directory of all posts on the site.</p>
+              </li>
+            </NavLink>
           </ul>
-          <Link to="/" className="p-3 inline-block text-2xl hover:bg-slate-200">
+          <Link to="/" className="p-3 inline-block text-2xl hover:bg-sky-200">
             Zalgorithm (home page)
           </Link>
         </div>

@@ -48,7 +48,7 @@ export default function BlogIndex() {
 
   return (
     <div>
-      <div className="px-6 pb-6 mx-auto max-w-screen-lg">
+      <div className="pb-6 mx-auto max-w-screen-lg">
         <h2 className="text-3xl text-slate-900 mt-3 font-serif font-bold text-center">
           Simon's Blog
         </h2>

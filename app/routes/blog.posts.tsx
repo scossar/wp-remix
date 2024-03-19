@@ -66,7 +66,7 @@ export default function Posts() {
   const basePath = "/blog";
 
   return (
-    <div className="px-6 mx-auto max-w-screen-lg">
+    <div className="mx-auto max-w-screen-lg">
       <div className="flex justify-center items-center h-full">
         <h2 className="text-3xl py-3 font-serif text-center">Posts</h2>
       </div>

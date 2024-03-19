@@ -108,7 +108,7 @@ export default function BlogPost() {
   };
 
   return (
-    <div className="mx-2 my-6 md:max-w-prose md:mx-auto">
+    <div className="my-6 md:max-w-prose md:mx-auto">
       {post?.featuredImage?.node?.sourceUrl ? (
         <figure className="max-w-full">
           <img
